@@ -1,17 +1,8 @@
-import logo from './logo.svg';
 import './App.css';
 
 import { Amplify, PubSub } from 'aws-amplify';
 import { AWSIoTProvider } from '@aws-amplify/pubsub';
-
-// Amplify.configure({
-//   Auth: {
-//   identityPoolId: process.env.REACT_APP_IDENTITY_POOL_ID,
-//   region: process.env.REACT_APP_REGION,
-//   userPoolId: process.env.REACT_APP_USER_POOL_ID,
-//   userPoolWebClientId: process.env.REACT_APP_USER_POOL_WEB_CLIENT_ID
-// }
-// });
+import React from 'react';
 
 Amplify.configure({
     Auth: {
@@ -28,31 +19,51 @@ Amplify.addPluggable(new AWSIoTProvider({
   aws_pubsub_endpoint: 'wss://a2zztnkycni9kh-ats.iot.us-west-1.amazonaws.com/mqtt',
 }));
 
-PubSub.subscribe('real-time-monitor').subscribe({
-  next: data => console.log('Message received', data),
-  error: error => console.error(error),
-  close: () => console.log('Done'),
-});
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      date : new Date(),
+      IoT_payload: ''
+    }
+  }
+  
+  tick(){
+    this.timer = setInterval(
+      ()=>this.setState({date: new Date()}),1000
+    )
+  }
+  componentDidMount(){
+    this.tick();
+    
+    // Handle MQTT payload and trigger rerendering with setstate
+    let message = '';
+    PubSub.subscribe('real-time-monitor').subscribe({
+      next: data => 
+      {console.log('Message received', data);
+      message = JSON.stringify(data);
+      // Comment the line below to view the full payload
+      message = message.substring(message.indexOf('value')+7).slice(0,-1)
+      this.setState({IoT_payload:message})
+      },
+      error: error => console.error(error),
+      close: () => console.log('Done'),
+    });  
+  }
+  
+  
+    render(){
+      return (
+        <div className="App">
+          {/* <header className="App-header"></header> */}
+            <h1>Construction monitor</h1>
+            <p>{this.state.date.toLocaleTimeString()}</p>
+            <a>IoT Payload: {this.state.IoT_payload}</a>
+        </div>
+      ); 
+    }
 }
 
 export default App;
