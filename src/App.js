@@ -44,7 +44,7 @@ class App extends React.Component {
             <h1>Construction monitor</h1>
             <Clock />
             <a>IoT Payload: {this.state.IoT_payload}</a>
-            <AChart/>
+            <AChart />
         </div>
       ); 
     }
