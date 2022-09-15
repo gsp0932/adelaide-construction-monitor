@@ -11,7 +11,7 @@ export function AwsIoT_connect(){
 	  }
 	  });
 	
-	// // Apply plugin with configuration
+	// Add pluggable connection with configuration
 	Amplify.addPluggable(new AWSIoTProvider({
 	  aws_pubsub_region: 'us-west-1',
 	  aws_pubsub_endpoint: 'wss://a2zztnkycni9kh-ats.iot.us-west-1.amazonaws.com/mqtt',
