@@ -90,21 +90,29 @@ class App extends React.Component {
           <Clock />
           <a>IoT Payload: {this.state.IoT_payload}</a>
           
+          <h1>Sensor 1</h1>
           <div class="linechart">
-            <h1>Sensor 1</h1>
-            <RealtimeLineChart
-              dataList={this.state.dataList}
-              range={TIME_RANGE_IN_MILLISECONDS}
-              />
-              
-            <h1>Sensor 2</h1>
             <RealtimeLineChart
               dataList={this.state.dataList}
               range={TIME_RANGE_IN_MILLISECONDS}
               />
           </div>
-              
-              
+          
+          <h1>Sensor 2</h1>
+          <div class="linechart">
+            <RealtimeLineChart
+              dataList={this.state.dataList}
+              range={TIME_RANGE_IN_MILLISECONDS}
+              />
+          </div>
+          
+          <h1>Sensor 3</h1>
+          <div class="linechart">
+            <RealtimeLineChart
+              dataList={this.state.dataList}
+              range={TIME_RANGE_IN_MILLISECONDS}
+              />
+          </div>
           
       </div>
     ); 
