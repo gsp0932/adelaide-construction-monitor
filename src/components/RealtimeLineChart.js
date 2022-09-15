@@ -38,14 +38,14 @@ class RealtimeLineChart extends React.Component {
 
 	render() {
 		return (
-		// <div id="chart">
+		<div id="chart" >
 			<Chart
 				type="line"
 				width="700"
 				options={this.state.options}
 				series={this.props.dataList}
 			/>
-		// </div>
+		</div>
 	  );
 	}
   }

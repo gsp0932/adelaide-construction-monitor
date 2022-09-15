@@ -86,13 +86,26 @@ class App extends React.Component {
     return (
       <div className="App">
         {/* <header className="App-header"></header> */}
-          {/* <h1>Construction monitor</h1> */}
-          {/* <Clock /> */}
-          {/* <a>IoT Payload: {this.state.IoT_payload}</a> */}
-          <RealtimeLineChart
-            dataList={this.state.dataList}
-            range={TIME_RANGE_IN_MILLISECONDS}
-            />
+          <h1>Real-time Construction Environment monitor</h1>
+          <Clock />
+          <a>IoT Payload: {this.state.IoT_payload}</a>
+          
+          <div class="linechart">
+            <h1>Sensor 1</h1>
+            <RealtimeLineChart
+              dataList={this.state.dataList}
+              range={TIME_RANGE_IN_MILLISECONDS}
+              />
+              
+            <h1>Sensor 2</h1>
+            <RealtimeLineChart
+              dataList={this.state.dataList}
+              range={TIME_RANGE_IN_MILLISECONDS}
+              />
+          </div>
+              
+              
+          
       </div>
     ); 
   }
