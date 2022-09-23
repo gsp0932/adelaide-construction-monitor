@@ -30,7 +30,7 @@ class RealtimeLineChart extends React.Component {
 					labels:{
 						formatter: val => val.toFixed(0)
 					},
-					title: {text: "Temperature/Humidity"}
+					title: {text: "Temperature"}
 				}
 			}
 		}
@@ -41,7 +41,8 @@ class RealtimeLineChart extends React.Component {
 		<div id="chart" >
 			<Chart
 				type="line"
-				width="700"
+				height="120"
+				width="270"
 				options={this.state.options}
 				series={this.props.dataList}
 			/>

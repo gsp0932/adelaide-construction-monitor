@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  background: linear-gradient(#5f5cff, transparent);
+  background-color: white;
 }
 
 .App-logo {
@@ -37,10 +39,29 @@
   }
 }
 
-
-.linechart{
-  height: 30vh; /* Magic here */
+.LineChart{
+  height: 10vh; /* Magic here */
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+.Device-row{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 50px;
+}
+
+.DeviceCard{
+  min-height: 400px; /* Card height */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  box-shadow: 1px 3px 2px gray;
+  border-radius: 15px;
+}
+

@@ -1,21 +1,23 @@
 import './App.css';
-import React from 'react';
+import React, {Component} from 'react';
 
-import { PubSub } from 'aws-amplify';
+import { button, PubSub } from 'aws-amplify';
 import {AwsIoT_connect} from './utils/connection';
 
 import Clock from './components/Clock';
 import RealtimeLineChart from './components/RealtimeLineChart';
 
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+
 // Authenticate and connect with AWS MQTT broker
 AwsIoT_connect();
 
-// Data for testing real-time charts
-const TIME_RANGE_IN_MILLISECONDS = 30 * 1000;
-const ADDING_DATA_INTERVAL_IN_MILLISECONDS = 1000;
-const ADDING_DATA_RATIO = 0.8;
+// Time range real-time chart
+const TIME_RANGE_IN_MILLISECONDS = 10 * 1000;
 
-const nameList = ["Temperature", "Humidity"]
+// Initialize line chart data
+const nameList = ["Temperature"]
 const defaultDatalist = nameList.map(name =>({
 name: name,
 data: []
@@ -28,7 +30,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       dataList: defaultDatalist,
-      IoT_payload: ''
+      IoT_payload: '',
+      IoT_payload_data: {}
     }
   }
   
@@ -36,84 +39,112 @@ class App extends React.Component {
   componentDidMount(){
     // Handle MQTT payload and trigger rerendering with setstate
     let message = '';
-    PubSub.subscribe('real-time-monitor').subscribe({
+    // PubSub.subscribe('real-time-monitor').subscribe({
+    PubSub.subscribe('device/ID000123/data/pub').subscribe({
       next: data => 
       {console.log('Message received', data);
       message = JSON.stringify(data);
       // Comment the line below to view the full payload
-      message = message.substring(message.indexOf('value')+7).slice(0,-1)
-      this.setState({IoT_payload:message})
+      message = message.substring(message.indexOf('value')+7).slice(0,-1);
+      // Convert payload to JSON
+      data = JSON.parse(message);
+      data = data.data;
+      this.setState({IoT_payload:message, IoT_payload_data: data, current_datalist_timestamp: data.timestamp});
+      
+      // Push new data into datalist and rerender // Has to be nested inside subcribe as an asyncrhonous call, otherwise, won't trigger rerendering chart.
+      this.setDataList();
       },
       error: error => console.error(error),
       close: () => console.log('Done'),
-    });
-    
-    // Generate testing data for Realtime Linechart    
-    this.setDataTimer = setInterval(
-      ()=>{this.setDataList()}, ADDING_DATA_INTERVAL_IN_MILLISECONDS
-    )
-
-  }
-  
-  addDataRandomly(data){
-    if (Math.random() < 1 - ADDING_DATA_RATIO){
-      return data;
-    }
-
-    return[
-      ...data,
-      {
-        x: new Date(),
-        y: data.length * Math.random()
-      }
-    ]
+  });
+      
   }
   
   setDataList(){
-    let newDatalist = []
+    let newDatalist = [];
     this.state.dataList.forEach((e)=>{
-      let latestData = e.data;
-      latestData = this.addDataRandomly(latestData);
-      newDatalist.push({name: e.name, data: latestData})
+        let currentData = e.data;
+        currentData = this.addData(currentData, this.state.IoT_payload_data);
+        newDatalist.push({name: e.name, data: currentData})
     })
-    this.setState({dataList: newDatalist})
+    this.setState({dataList: newDatalist});
   }
+  
+  addData(currentData, payloadData){
+    return[...currentData,  {x: new Date(),y: payloadData.temp} ]
+  }
+  
       
-  
-  
-  
   render(){
     return (
+      
       <div className="App">
         {/* <header className="App-header"></header> */}
-          <h1>Real-time Construction Environment monitor</h1>
-          <Clock />
-          <a>IoT Payload: {this.state.IoT_payload}</a>
+          <Grid container spacing={2} direction="column" justifyContent="center" alignItems="center">
+            
+            <Box 
+            display="flex"
+            flexDirection={"row"}
+            justify-content="space-between"
+            alignItems="stretch"
+            gap="150px"
+            marginTop={5} 
+            >
+              <div style={{fontSize: '1.3rem', fontWeight:'bold', color: 'white', marginLeft: '20px'} }>Device</div>
+              <button>Add device</button>
+            </Box>
+            
+            <Grid item xs={6} md={8}>
+              <Box className="DeviceCard" sx={{maxWidth: 350}}>
+                <Box style={{backgroundColor: '#172143', width: '300px', 
+                height: '45px', display: 'flex', flexDirection: 'row', 
+                alignItems: 'center', justifyContent: 'center', gap: '50px'}}>
+                  <div style={{color:"white"}}> Device: ID00123 </div>
+                  <div style={{color:"lime"}}> Status: Normal </div>
+                </Box>
+                
+                <Box>
+                  <p>Temperature</p><br></br>
+                  <div className="LineChart">
+                    <RealtimeLineChart
+                      dataList={this.state.dataList}
+                      range={TIME_RANGE_IN_MILLISECONDS}
+                      />
+                  </div>
+                </Box>
+                
+                <p>Temperature</p><br></br>
+                <div className="LineChart">
+                  <RealtimeLineChart
+                    dataList={this.state.dataList}
+                    range={TIME_RANGE_IN_MILLISECONDS}
+                    />
+                </div>
+                
+                <p>Temperature</p><br></br>
+                <div className="LineChart">
+                  <RealtimeLineChart
+                    dataList={this.state.dataList}
+                    range={TIME_RANGE_IN_MILLISECONDS}
+                    />
+                </div>
+                
+              </Box>
+            </Grid >
+
+            
+              
+          </Grid>
           
-          <h1>Sensor 1</h1>
-          <div class="linechart">
-            <RealtimeLineChart
-              dataList={this.state.dataList}
-              range={TIME_RANGE_IN_MILLISECONDS}
-              />
-          </div>
           
-          <h1>Sensor 2</h1>
-          <div class="linechart">
-            <RealtimeLineChart
-              dataList={this.state.dataList}
-              range={TIME_RANGE_IN_MILLISECONDS}
-              />
-          </div>
-          
-          <h1>Sensor 3</h1>
-          <div class="linechart">
-            <RealtimeLineChart
-              dataList={this.state.dataList}
-              range={TIME_RANGE_IN_MILLISECONDS}
-              />
-          </div>
-          
+          {/* <p>Humidity</p>
+              <div className="LineChart">
+                <RealtimeLineChart
+                  dataList={this.state.dataList}
+                  range={TIME_RANGE_IN_MILLISECONDS}
+                  />
+              </div> */}
+              
       </div>
     ); 
   }
