@@ -7,8 +7,11 @@ class RealtimeLineChart extends React.Component {
 	  this.state = {
 			options: {
 				chart: {
+					toolbar: {
+						show: false
+					},
 					zoom: {
-						enabled: true
+						enabled: false
 					},
 					animation:{
 						easing: "linear",
@@ -30,7 +33,6 @@ class RealtimeLineChart extends React.Component {
 					labels:{
 						formatter: val => val.toFixed(0)
 					},
-					title: {text: "Temperature"}
 				}
 			}
 		}
@@ -41,8 +43,8 @@ class RealtimeLineChart extends React.Component {
 		<div id="chart" >
 			<Chart
 				type="line"
-				height="120"
-				width="270"
+				height="130"
+				width="220"
 				options={this.state.options}
 				series={this.props.dataList}
 			/>
