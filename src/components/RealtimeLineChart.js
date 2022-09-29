@@ -43,7 +43,7 @@ class RealtimeLineChart extends React.Component {
 		<div id="chart" >
 			<Chart
 				type="line"
-				height="130"
+				height="120"
 				width="220"
 				options={this.state.options}
 				series={this.props.dataList}
