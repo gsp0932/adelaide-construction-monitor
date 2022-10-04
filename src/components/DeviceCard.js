@@ -122,7 +122,7 @@ class DeviceCard extends React.Component{
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
-				<Box className="tempCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end">
+				<Box className="tempCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
 						<div style={{fontWeight:"bold", marginTop:"7px", marginBottom:"2px"}}> Temperature</div>
 						<ReactApexChart options={tempRadialChartOption} series={this.state.currentTemp} type="radialBar" height={120} width={80}/>
@@ -135,7 +135,7 @@ class DeviceCard extends React.Component{
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
-				<Box className="humCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end">
+				<Box className="humCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
 						<div style={{fontWeight:"bold", marginTop:"7px", marginBottom:"2px"}}> Humidity</div>
 						<ReactApexChart options={humRadialChartOption} series={this.state.currentHum} type="radialBar" height={120} width={80}/>
@@ -149,7 +149,7 @@ class DeviceCard extends React.Component{
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
-				<Box className="pm25Charts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end">
+				<Box className="pm25Charts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
 						<div style={{fontWeight:"bold", marginTop:"7px", marginBottom:"2px"}}>PM2.5</div>
 						<ReactApexChart options={pmRadialChartOption} series={this.state.currentPM25} type="radialBar" height={120} width={80}/>
@@ -163,14 +163,18 @@ class DeviceCard extends React.Component{
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
-				<Box className="soundAndVibChart" display="flex" flexDirection="row" alignItems="center" justifyContent="space-evenly" gap="15px" height="150px">
+				<Box className="soundAndVibChart" display="flex" flexDirection="row" alignItems="center" justifyContent="space-evenly" gap="15px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="flex-end">
 						<div style={{fontWeight:"bold", marginTop:"7px" }}>Acoustic</div>
-						<ReactApexChart options={soundRadialStroke} series={this.state.currentSound} type="radialBar" height={220} width={150}/>
+						<Box maxHeight="90px" overflow="hidden">
+							<ReactApexChart options={soundRadialStroke} series={this.state.currentSound} type="radialBar" height={220} width={150}/>
+						</Box>
 					</Box>
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="flex-end">
 						<div style={{fontWeight:"bold", marginTop:"7px"}}>Vibration</div>
-						<ReactApexChart options={vibrationRadialStroke} series={this.state.currentVibration} type="radialBar" height={220} width={150}/>
+						<Box maxHeight="90px" overflow="hidden">
+							<ReactApexChart options={vibrationRadialStroke} series={this.state.currentVibration} type="radialBar" height={220} width={150}/>
+						</Box>
 					</Box>
 				</Box>
 				
