@@ -18,7 +18,7 @@ class RealtimeLineChart extends React.Component {
 						dynamicAnimation: {
 							speed: 500
 						}
-					}
+					},
 				},
 				tooltip:{
 					x: {

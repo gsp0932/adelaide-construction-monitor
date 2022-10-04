@@ -225,9 +225,12 @@ export var soundRadialStroke =
 {
 	grid: {
 		padding: {
-		 top: 0,
+		 top: -25,
 		 bottom: 0
 		}
+	},
+	sparkline: {
+		enabled: true
 	},
 	plotOptions: {
 		radialBar: {
@@ -271,9 +274,12 @@ export var vibrationRadialStroke =
 {
 	grid: {
 		padding: {
-		 top: 0,
+		 top: -25,
 		 bottom: 0
 		}
+	},
+	sparkline: {
+		enabled: true
 	},
 	plotOptions: {
 		radialBar: {

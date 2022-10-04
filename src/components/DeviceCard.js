@@ -98,7 +98,7 @@ class DeviceCard extends React.Component{
   }
 	
   addData(currentData, payloadAttributeData){
-    return[...currentData,  {x: new Date(),y: payloadAttributeData} ]
+    return[...currentData,  {x: new Date(), y: payloadAttributeData}]
   }
 	
 	handleTempExpandClick(){this.setState(prevState => ({TempExpanded: !prevState.TempExpanded}));}
@@ -113,112 +113,65 @@ class DeviceCard extends React.Component{
 				<Box style={{backgroundColor: '#172153', width: '300px', 
 				height: '45px', width: '340px',
 				display: 'flex', flexDirection: 'row', 
-				alignItems: 'center', justifyContent: 'center', gap: '90px'}}>
-					<div >
+				alignItems: 'center', justifyContent: 'center', gap: '95px', padding: '5px'}}>
+					<div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
 						<div style={{color:"white", fontWeight:"bold"}}>  {this.state.deviceID} </div>
-						<div style={{color:"white", fontWeight:"bold"}}> Building 21 </div>
+						<div style={{color:"white", fontSize: "14px"}}> Building 21 </div>
 					</div>
-					<div style={{color:"lime"}}> Normal </div>
+					<div style={{color:"lime", fontWeight:"bold"}}> Normal </div>
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
-				<Box className="tempCharts">
-					<Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={8}>
-						<div style={{fontWeight:"bold"}}> Temperature</div>
-						{/* <Switch defaultChecked/> */}
-						{/* <ExpandMore expand={this.state.TempExpanded} onClick={this.handleTempExpandClick} aria-expanded={this.state.TempExpanded}>
-							<ExpandMoreIcon/>
-						</ExpandMore> */}
+				<Box className="tempCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end">
+					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+						<div style={{fontWeight:"bold", marginTop:"7px", marginBottom:"2px"}}> Temperature</div>
+						<ReactApexChart options={tempRadialChartOption} series={this.state.currentTemp} type="radialBar" height={120} width={80}/>
 					</Box>
-					
-					<Collapse in={this.state.TempExpanded} timeout="auto" unmountOnExit>
-						<Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-around" marginTop={0.5}>
-							<div>
-								<ReactApexChart options={tempRadialChartOption} series={this.state.currentTemp} type="radialBar" height={120} width={80}
+						<div className="LineChart">
+							<RealtimeLineChart
+								dataList={this.state.tempDatalist}
+								range={TIME_RANGE_IN_MILLISECONDS}/>
+						</div>
+				</Box>
+				
+				<Divider style={{width:'100%'}}></Divider>
+				<Box className="humCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end">
+					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+						<div style={{fontWeight:"bold", marginTop:"7px", marginBottom:"2px"}}> Humidity</div>
+						<ReactApexChart options={humRadialChartOption} series={this.state.currentHum} type="radialBar" height={120} width={80}/>
+					</Box>
+						<div className="LineChart">
+							<RealtimeLineChart
+								dataList={this.state.humDatalist}
+								range={TIME_RANGE_IN_MILLISECONDS}
 								/>
-							</div>
-							<div className="LineChart">
-								<RealtimeLineChart
-									dataList={this.state.tempDatalist}
-									range={TIME_RANGE_IN_MILLISECONDS}
-									/>
-							</div>
-						</Box>
-					</Collapse>
+						</div>
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
-				<Box className="humCharts">
-					<Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={9}>
-						<div style={{fontWeight:"bold"}}> Humidity</div>
-						{/* <Switch defaultChecked/> */}
-						{/* <ExpandMore expand={this.state.HumExpanded} onClick={this.handleHumExpandClick} aria-expanded={this.state.HumExpanded}>
-							<ExpandMoreIcon/>
-						</ExpandMore> */}
+				<Box className="pm25Charts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end">
+					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+						<div style={{fontWeight:"bold", marginTop:"7px", marginBottom:"2px"}}>PM2.5</div>
+						<ReactApexChart options={pmRadialChartOption} series={this.state.currentPM25} type="radialBar" height={120} width={80}/>
 					</Box>
-					
-					<Collapse in={this.state.HumExpanded} timeout="auto" unmountOnExit>
-						<Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-around" marginTop={0.5}>
-							<div >
-								<ReactApexChart options={humRadialChartOption} series={this.state.currentHum} type="radialBar" height={120} width={80}/>
-							</div>
-							<div className="LineChart">
-								<RealtimeLineChart
-									dataList={this.state.humDatalist}
-									range={TIME_RANGE_IN_MILLISECONDS}
-									/>
-							</div>
-						</Box>
-					</Collapse>
+					<div className="LineChart">
+						<RealtimeLineChart
+							dataList={this.state.pmDatalist}
+							range={TIME_RANGE_IN_MILLISECONDS}
+							/>
+					</div>
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
-				<Box className="pm25Charts">
-					<Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={10}>
-						<div style={{fontWeight:"bold"}}>PM 2.5</div>
-						{/* <Switch defaultChecked/>
-						<ExpandMore expand={this.state.PM25Expanded} onClick={this.handlePMExpandClick} aria-expanded={this.state.PM25Expanded}>
-							<ExpandMoreIcon/>
-						</ExpandMore> */}
+				<Box className="soundAndVibChart" display="flex" flexDirection="row" alignItems="center" justifyContent="space-evenly" gap="15px" height="150px">
+					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="flex-end">
+						<div style={{fontWeight:"bold", marginTop:"7px" }}>Acoustic</div>
+						<ReactApexChart options={soundRadialStroke} series={this.state.currentSound} type="radialBar" height={220} width={150}/>
 					</Box>
-					
-					<Collapse in={this.state.PM25Expanded} timeout="auto" unmountOnExit>
-						<Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-around" marginTop={0.5}>
-							<div >
-								<ReactApexChart options={pmRadialChartOption} series={this.state.currentPM25} type="radialBar" height={120} width={80}/>
-							</div>
-							<div className="LineChart">
-								<RealtimeLineChart
-									dataList={this.state.pmDatalist}
-									range={TIME_RANGE_IN_MILLISECONDS}
-									/>
-							</div>
-						</Box>
-					</Collapse>
-				</Box>
-				
-				<Divider style={{width:'100%'}}></Divider>
-				<Box className="soundAndVibChart">
-					<Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={12}>
-						<div style={{fontWeight:"bold"}}>Acoustic</div>
-						{/* <Switch defaultChecked/> */}
-						<div style={{fontWeight:"bold"}}>Vibration</div>
-						{/* <Switch defaultChecked/> */}
-						{/* <ExpandMore expand={this.state.SoundExpanded} onClick={this.handleSoundExpandClick} aria-expanded={this.state.SoundExpanded}>
-							<ExpandMoreIcon/>
-						</ExpandMore> */}
+					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="flex-end">
+						<div style={{fontWeight:"bold", marginTop:"7px"}}>Vibration</div>
+						<ReactApexChart options={vibrationRadialStroke} series={this.state.currentVibration} type="radialBar" height={220} width={150}/>
 					</Box>
-					
-					<Collapse in={this.state.SoundExpanded} timeout="auto" unmountOnExit>
-						<Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-around" marginTop={0.5}>
-							<div >
-								<ReactApexChart options={soundRadialStroke} series={this.state.currentSound} type="radialBar" height={220} width={150}/>
-							</div>
-							<div >
-								<ReactApexChart options={vibrationRadialStroke} series={this.state.currentVibration} type="radialBar" height={220} width={150}/>
-							</div>
-						</Box>
-					</Collapse>
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
