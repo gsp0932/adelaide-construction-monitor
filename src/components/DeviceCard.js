@@ -75,9 +75,11 @@ class DeviceCard extends React.Component{
       this.setState({currentPM25: [message_object.state.reported.data[0].pm25]});
 			this.setState({currentSound: [-message_object.state.reported.data[0].sound]});
 			this.setState({currentVibration: [message_object.state.reported.data[0].vib]});
-      this.setState({tempDatalist: this.setDataList(this.state.tempDatalist,this.state.IoT_device_data.temp)});
-      this.setState({humDatalist: this.setDataList(this.state.humDatalist,this.state.IoT_device_data.humid)});
-			this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,this.state.IoT_device_data.pm25)});
+      this.setState({tempDatalist: this.setDataList(this.state.tempDatalist,message_object.state.reported.data[0].temp)});
+      this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[0].humid)});
+			this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[0].pm25)});
+			
+			
 			},
       error: error => console.error(error),
       close: () => console.log('Done'),
@@ -111,19 +113,22 @@ class DeviceCard extends React.Component{
 				<Box style={{backgroundColor: '#172153', width: '300px', 
 				height: '45px', width: '340px',
 				display: 'flex', flexDirection: 'row', 
-				alignItems: 'center', justifyContent: 'center', gap: '80px'}}>
-					<div style={{color:"white"}}> Device: {this.state.deviceID} </div>
-					<div style={{color:"lime"}}> Status: Normal </div>
+				alignItems: 'center', justifyContent: 'center', gap: '90px'}}>
+					<div >
+						<div style={{color:"white", fontWeight:"bold"}}>  {this.state.deviceID} </div>
+						<div style={{color:"white", fontWeight:"bold"}}> Building 21 </div>
+					</div>
+					<div style={{color:"lime"}}> Normal </div>
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
 				<Box className="tempCharts">
 					<Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={8}>
-						<div >Temperature</div>
-						<Switch defaultChecked/>
-						<ExpandMore expand={this.state.TempExpanded} onClick={this.handleTempExpandClick} aria-expanded={this.state.TempExpanded}>
+						<div style={{fontWeight:"bold"}}> Temperature</div>
+						{/* <Switch defaultChecked/> */}
+						{/* <ExpandMore expand={this.state.TempExpanded} onClick={this.handleTempExpandClick} aria-expanded={this.state.TempExpanded}>
 							<ExpandMoreIcon/>
-						</ExpandMore>
+						</ExpandMore> */}
 					</Box>
 					
 					<Collapse in={this.state.TempExpanded} timeout="auto" unmountOnExit>
@@ -145,11 +150,11 @@ class DeviceCard extends React.Component{
 				<Divider style={{width:'100%'}}></Divider>
 				<Box className="humCharts">
 					<Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={9}>
-						<div >Humidity</div>
-						<Switch defaultChecked/>
-						<ExpandMore expand={this.state.HumExpanded} onClick={this.handleHumExpandClick} aria-expanded={this.state.HumExpanded}>
+						<div style={{fontWeight:"bold"}}> Humidity</div>
+						{/* <Switch defaultChecked/> */}
+						{/* <ExpandMore expand={this.state.HumExpanded} onClick={this.handleHumExpandClick} aria-expanded={this.state.HumExpanded}>
 							<ExpandMoreIcon/>
-						</ExpandMore>
+						</ExpandMore> */}
 					</Box>
 					
 					<Collapse in={this.state.HumExpanded} timeout="auto" unmountOnExit>
@@ -170,11 +175,11 @@ class DeviceCard extends React.Component{
 				<Divider style={{width:'100%'}}></Divider>
 				<Box className="pm25Charts">
 					<Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={10}>
-						<div >PM2.5</div>
-						<Switch defaultChecked/>
+						<div style={{fontWeight:"bold"}}>PM 2.5</div>
+						{/* <Switch defaultChecked/>
 						<ExpandMore expand={this.state.PM25Expanded} onClick={this.handlePMExpandClick} aria-expanded={this.state.PM25Expanded}>
 							<ExpandMoreIcon/>
-						</ExpandMore>
+						</ExpandMore> */}
 					</Box>
 					
 					<Collapse in={this.state.PM25Expanded} timeout="auto" unmountOnExit>
@@ -194,14 +199,14 @@ class DeviceCard extends React.Component{
 				
 				<Divider style={{width:'100%'}}></Divider>
 				<Box className="soundAndVibChart">
-					<Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={1.5}>
-						<div >Sound</div>
-						<Switch defaultChecked/>
-						<div >Vibration</div>
-						<Switch defaultChecked/>
-						<ExpandMore expand={this.state.SoundExpanded} onClick={this.handleSoundExpandClick} aria-expanded={this.state.SoundExpanded}>
+					<Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={12}>
+						<div style={{fontWeight:"bold"}}>Acoustic</div>
+						{/* <Switch defaultChecked/> */}
+						<div style={{fontWeight:"bold"}}>Vibration</div>
+						{/* <Switch defaultChecked/> */}
+						{/* <ExpandMore expand={this.state.SoundExpanded} onClick={this.handleSoundExpandClick} aria-expanded={this.state.SoundExpanded}>
 							<ExpandMoreIcon/>
-						</ExpandMore>
+						</ExpandMore> */}
 					</Box>
 					
 					<Collapse in={this.state.SoundExpanded} timeout="auto" unmountOnExit>

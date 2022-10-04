@@ -36,16 +36,16 @@ export var tempRadialChartOption =
 				dataLabels: {
 					show: true,
 					name: {
-						offsetY: -5,
+						offsetY: -9,
 						show: true,
 						color: '#888',
-						fontSize: '10px'
+						fontSize: '12px'
 					},
 					value: {
 						formatter: function(val) {
 							return parseInt(val);
 						},
-						offsetY:5,
+						offsetY:0,
 						color: '#111',
 						fontSize: '25px',
 						show: true,
@@ -69,7 +69,7 @@ export var tempRadialChartOption =
 		stroke: {
 			lineCap: 'round'
 		},
-		labels: ['Celcius'],
+		labels: [String.fromCodePoint(8451)],
 	}
 	
 
@@ -111,16 +111,16 @@ export var humRadialChartOption =
 			dataLabels: {
 				show: true,
 				name: {
-					offsetY: -5,
+					offsetY: -9,
 					show: true,
 					color: '#888',
-					fontSize: '10px'
+					fontSize: '12px'
 				},
 				value: {
 					formatter: function(val) {
 						return parseInt(val);
 					},
-					offsetY:5,
+					offsetY:0,
 					color: '#111',
 					fontSize: '25px',
 					show: true,
@@ -144,7 +144,7 @@ export var humRadialChartOption =
 	stroke: {
 		lineCap: 'round'
 	},
-	labels: ['Percent'],
+	labels: ['%'],
 }
 
 export var pmRadialChartOption =
@@ -185,7 +185,7 @@ export var pmRadialChartOption =
 			dataLabels: {
 				show: true,
 				name: {
-					offsetY: -5,
+					offsetY: -9,
 					show: true,
 					color: '#888',
 					fontSize: '10px'
@@ -194,7 +194,7 @@ export var pmRadialChartOption =
 					formatter: function(val) {
 						return parseInt(val);
 					},
-					offsetY:5,
+					offsetY:0,
 					color: '#111',
 					fontSize: '25px',
 					show: true,
@@ -218,11 +218,17 @@ export var pmRadialChartOption =
 	stroke: {
 		lineCap: 'round'
 	},
-	labels: ['mm'],
+	labels: ['AQI'],
 }
 
 export var soundRadialStroke =
 {
+	grid: {
+		padding: {
+		 top: 0,
+		 bottom: 0
+		}
+	},
 	plotOptions: {
 		radialBar: {
 			startAngle: -90,
@@ -238,7 +244,7 @@ export var soundRadialStroke =
 					fontSize: '22px',
 					color: undefined,
 					formatter: function (val) {
-						return val + "db";
+						return -val;
 					}
 				}
 			}
@@ -258,11 +264,17 @@ export var soundRadialStroke =
 	stroke: {
 		dashArray: 4
 	},
-	labels: ['Decibel'],
+	labels: ['dB'],
 }
 
 export var vibrationRadialStroke =
 {
+	grid: {
+		padding: {
+		 top: 0,
+		 bottom: 0
+		}
+	},
 	plotOptions: {
 		radialBar: {
 			startAngle: -90,
@@ -278,7 +290,7 @@ export var vibrationRadialStroke =
 					fontSize: '22px',
 					color: undefined,
 					formatter: function (val) {
-						return val + "hz";
+						return val;
 					}
 				}
 			}
@@ -298,7 +310,7 @@ export var vibrationRadialStroke =
 	stroke: {
 		dashArray: 4
 	},
-	labels: ['Hertz'],
+	labels: ['Hz'],
 }
 
 
