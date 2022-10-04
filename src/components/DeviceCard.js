@@ -36,7 +36,7 @@ class DeviceCard extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			deviceID: 'ID000123',
+			deviceID: 'construction_esp32',
 			currentTemp: [0], tempDatalist: [{name: "Temperature", data: []}],
 			currentHum: [0], humDatalist: [{name: "Humidity", data: []}],
 			currentPM25: [0], pmDatalist: [{name: "PM2.5", data: []}],
@@ -55,7 +55,7 @@ class DeviceCard extends React.Component{
 	componentDidMount(){
     // Handle MQTT payload and trigger rerendering with setstate
     // PubSub.subscribe('real-time-monitor').subscribe({
-			let device_data_publish = 'device/' +  this.state.deviceID + '/data/pub';
+			let device_data_publish = '$aws/things/' +  this.state.deviceID + '/shadow/update';
 			PubSub.subscribe(device_data_publish).subscribe({
 			next: data => 
 			{
@@ -64,23 +64,25 @@ class DeviceCard extends React.Component{
       message = JSON.stringify(data);
       // Grep message content and convert to object
       let message_object = JSON.parse(message.substring(message.indexOf('value')+7).slice(0,-1));
-      this.setState({IoT_payload_object:message_object, IoT_device_data: message_object.data, current_datalist_timestamp: message_object.data.timestamp});
-      
+			// The two following lines below for MQTT parsing debugging
+			// console.log(message);
+			// console.log(message_object.state.reported.data[0]);
+      this.setState({IoT_payload_object:message_object, IoT_device_data: message_object.state.reported.data[0], current_datalist_timestamp: message_object.state.reported.data[0].timestamp});
 			// Has to be nested inside subcribe as an asyncrhonous call, otherwise, won't trigger rerendering chart.
       // Push device data to each type of charts
-      this.setState({currentTemp: [message_object.data.temp]});
-      this.setState({currentHum: [message_object.data.humid]});
-      this.setState({currentPM25: [message_object.data.pm25]});
-			this.setState({currentSound: [-message_object.data.sound]});
-			this.setState({currentVibration: [message_object.data.vib]});
+      this.setState({currentTemp: [message_object.state.reported.data[0].temp]});
+      this.setState({currentHum: [message_object.state.reported.data[0].humid]});
+      this.setState({currentPM25: [message_object.state.reported.data[0].pm25]});
+			this.setState({currentSound: [-message_object.state.reported.data[0].sound]});
+			this.setState({currentVibration: [message_object.state.reported.data[0].vib]});
       this.setState({tempDatalist: this.setDataList(this.state.tempDatalist,this.state.IoT_device_data.temp)});
       this.setState({humDatalist: this.setDataList(this.state.humDatalist,this.state.IoT_device_data.humid)});
 			this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,this.state.IoT_device_data.pm25)});
-      },
+			},
       error: error => console.error(error),
       close: () => console.log('Done'),
   });
-      
+			
   }
   
   setDataList(attributeDatalist, payloadAtrributeData){
