@@ -73,7 +73,7 @@ class DeviceCard extends React.Component{
       this.setState({currentTemp: [message_object.state.reported.data[0].temp]});
       this.setState({currentHum: [message_object.state.reported.data[0].humid]});
       this.setState({currentPM25: [message_object.state.reported.data[0].pm25]});
-			this.setState({currentSound: [-message_object.state.reported.data[0].sound]});
+			this.setState({currentSound: [message_object.state.reported.data[0].sound+100]});
 			this.setState({currentVibration: [message_object.state.reported.data[0].vib]});
       this.setState({tempDatalist: this.setDataList(this.state.tempDatalist,message_object.state.reported.data[0].temp)});
       this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[0].humid)});

@@ -247,7 +247,7 @@ export var soundRadialStroke =
 					fontSize: '22px',
 					color: undefined,
 					formatter: function (val) {
-						return -val;
+						return val-100;
 					}
 				}
 			}
