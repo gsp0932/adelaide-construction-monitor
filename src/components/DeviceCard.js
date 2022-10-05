@@ -12,6 +12,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import Switch from '@mui/material/Switch';
 import {styled} from '@mui/material/styles';
+import {HistoryButton} from './HistoryButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import Grid from '@mui/material/Grid';
@@ -88,18 +89,18 @@ class DeviceCard extends React.Component{
   }
   
   setDataList(attributeDatalist, payloadAtrributeData){
-    let newDatalist = [];
+		let newDatalist = [];
     attributeDatalist.forEach((e)=>{
-        let currentData = e.data;
-        currentData = this.addData(currentData, payloadAtrributeData);
-        newDatalist.push({name: e.name, data: currentData})
+			let currentData = e.data;
+			currentData = this.addData(currentData, payloadAtrributeData);
+			newDatalist.push({name: e.name, data: currentData})
     })
 		return newDatalist;
   }
 	
-  addData(currentData, payloadAttributeData){
-    return[...currentData,  {x: new Date(), y: payloadAttributeData}]
-  }
+	addData(currentData, payloadAttributeData){
+		return[...currentData,  {x: new Date(), y: payloadAttributeData}]
+	}
 	
 	handleTempExpandClick(){this.setState(prevState => ({TempExpanded: !prevState.TempExpanded}));}
 	handleHumExpandClick(){this.setState(prevState => ({HumExpanded: !prevState.HumExpanded}));}
@@ -124,7 +125,7 @@ class DeviceCard extends React.Component{
 				<Divider style={{width:'100%'}}></Divider>
 				<Box className="tempCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-						<div style={{fontWeight:"bold", marginTop:"7px", marginBottom:"2px"}}> Temperature</div>
+						<div style={{fontWeight:"bold", color:"#454545", marginTop:"7px", marginBottom:"2px"}}> Temperature</div>
 						<ReactApexChart options={tempRadialChartOption} series={this.state.currentTemp} type="radialBar" height={120} width={80}/>
 					</Box>
 						<div className="LineChart">
@@ -137,7 +138,7 @@ class DeviceCard extends React.Component{
 				<Divider style={{width:'100%'}}></Divider>
 				<Box className="humCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-						<div style={{fontWeight:"bold", marginTop:"7px", marginBottom:"2px"}}> Humidity</div>
+						<div style={{fontWeight:"bold",color:"#454545", marginTop:"7px", marginBottom:"2px"}}> Humidity</div>
 						<ReactApexChart options={humRadialChartOption} series={this.state.currentHum} type="radialBar" height={120} width={80}/>
 					</Box>
 						<div className="LineChart">
@@ -151,7 +152,7 @@ class DeviceCard extends React.Component{
 				<Divider style={{width:'100%'}}></Divider>
 				<Box className="pm25Charts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-						<div style={{fontWeight:"bold", marginTop:"7px", marginBottom:"2px"}}>PM2.5</div>
+						<div style={{fontWeight:"bold", color:"#454545", marginTop:"7px", marginBottom:"2px"}}>PM2.5</div>
 						<ReactApexChart options={pmRadialChartOption} series={this.state.currentPM25} type="radialBar" height={120} width={80}/>
 					</Box>
 					<div className="LineChart">
@@ -165,13 +166,13 @@ class DeviceCard extends React.Component{
 				<Divider style={{width:'100%'}}></Divider>
 				<Box className="soundAndVibChart" display="flex" flexDirection="row" alignItems="center" justifyContent="space-evenly" gap="15px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="flex-end">
-						<div style={{fontWeight:"bold", marginTop:"7px" }}>Acoustic</div>
+						<div style={{fontWeight:"bold", color:"#454545", marginTop:"7px" }}>Acoustic</div>
 						<Box maxHeight="90px" overflow="hidden">
 							<ReactApexChart options={soundRadialStroke} series={this.state.currentSound} type="radialBar" height={220} width={150}/>
 						</Box>
 					</Box>
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="flex-end">
-						<div style={{fontWeight:"bold", marginTop:"7px"}}>Vibration</div>
+						<div style={{fontWeight:"bold", color:"#454545", marginTop:"7px"}}>Vibration</div>
 						<Box maxHeight="90px" overflow="hidden">
 							<ReactApexChart options={vibrationRadialStroke} series={this.state.currentVibration} type="radialBar" height={220} width={150}/>
 						</Box>
@@ -186,19 +187,13 @@ class DeviceCard extends React.Component{
 					<IconButton>
 						<SettingsIcon/>
 					</IconButton>
-					<IconButton>
-						<HistoryIcon/>
-					</IconButton>
+					<HistoryButton/>
 					<Box style={{border: "1px solid #000", borderColor:"gray", borderRadius:30, overflow: "hidden", height: 30, width: 30, display: "flex", alignItems: "center", justifyContent: "center"}}>
-						{/* <ToggleButton aria-label="device-option" > */}
-							<PowerSettingsNewIcon/>
-						{/* </ToggleButton> */}
+					<IconButton>
+						<PowerSettingsNewIcon/>
+					</IconButton>
 					</Box>
-					
 				</Box>
-				
-				
-				
 			</Box>
 				
 			</Grid>
