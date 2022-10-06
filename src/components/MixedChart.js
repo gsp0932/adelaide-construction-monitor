@@ -20,7 +20,7 @@ class MixedChart extends React.Component {
             }, {
               name: 'PM2.5',
               type: 'line',
-              data: [20, 29, 37, 36, 44, 45, 50, 58]
+              data: [20, 29, 37, 36, 44, 45, 50, 52]
             }],
             options: {
               chart: {
@@ -99,7 +99,7 @@ class MixedChart extends React.Component {
                     }
                   },
                   title: {
-                    text: "Humidity",
+                    text: "Humidity (%)",
                     style: {
                       color: '#008FFB',
                     }
@@ -121,7 +121,7 @@ class MixedChart extends React.Component {
                     },
                   },
                   title: {
-                    text: "PM2.5",
+                    text: "PM2.5 (mm)",
                     style: {
                       color: '#FEB019',
                     }

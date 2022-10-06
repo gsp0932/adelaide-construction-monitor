@@ -32,11 +32,11 @@ class BrushChart extends React.Component {
 		this.state = {
 		
 			series: [{
-				name: 'Acoustic',
+				name: 'Acoustic (-dB)',
 				data: acoustic_data,
 				color: '#00FFFF'
 			}, {
-				name: 'Vibration',
+				name: 'Vibration (hz)',
 				data: vibration_data,
 				color: '#A020F0'
 			}],
