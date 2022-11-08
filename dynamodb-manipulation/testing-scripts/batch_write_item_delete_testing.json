@@ -1,0 +1,12 @@
+{ 
+  "construction_data": [
+    {
+      "DeleteRequest": {
+        "Key":{
+          "sample_time":{"N":"3814"}
+          }
+       }
+    }
+  ]
+}
+

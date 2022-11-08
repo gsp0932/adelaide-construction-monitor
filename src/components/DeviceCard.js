@@ -68,17 +68,27 @@ class DeviceCard extends React.Component{
 			// The two following lines below for MQTT parsing debugging
 			// console.log(message);
 			// console.log(message_object.state.reported.data[0]);
-      this.setState({IoT_payload_object:message_object, IoT_device_data: message_object.state.reported.data[0], current_datalist_timestamp: message_object.state.reported.data[0].timestamp});
-			// Has to be nested inside subcribe as an asyncrhonous call, otherwise, won't trigger rerendering chart.
-      // Push device data to each type of charts
-      this.setState({currentTemp: [message_object.state.reported.data[0].temp]});
-      this.setState({currentHum: [message_object.state.reported.data[0].humid]});
-      this.setState({currentPM25: [message_object.state.reported.data[0].pm25]});
-			this.setState({currentSound: [-message_object.state.reported.data[0].sound]});
-			this.setState({currentVibration: [message_object.state.reported.data[0].vib]});
-      this.setState({tempDatalist: this.setDataList(this.state.tempDatalist,message_object.state.reported.data[0].temp)});
-      this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[0].humid)});
-			this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[0].pm25)});
+			
+			// Loop through data array
+			for (let i = 0; i < message_object.state.reported.data.length; i++){
+				this.setState({
+					IoT_payload_object:message_object, 
+					IoT_device_data: message_object.state.reported.data[i], 
+					current_datalist_timestamp: message_object.state.reported.data[i].data_timestamp});
+				// Has to be nested inside subcribe as an asyncrhonous call, otherwise, won't trigger rerendering chart.
+				// Push device data to each type of charts
+				this.setState({currentTemp: [message_object.state.reported.data[i].temp]});
+				this.setState({currentHum: [message_object.state.reported.data[i].humid]});
+				this.setState({currentPM25: [message_object.state.reported.data[i].pm25]});
+				this.setState({currentSound: [message_object.state.reported.data[i].sound]});
+				this.setState({currentVibration: [message_object.state.reported.data[i].vib]});
+				this.setState({tempDatalist: this.setDataList(this.state.tempDatalist,message_object.state.reported.data[i].temp)});
+				this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
+				this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
+				if (i !== message_object.state.reported.data.length - 1){
+					setTimeout(()=>{}, message_object.state.reported.data[i+1].data_timestamp - this.state.current_datalist_timestamp);
+				}
+			}
 			
 			
 			},
