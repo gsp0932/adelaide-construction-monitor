@@ -32,7 +32,7 @@ const ExpandMore = styled((props)=>{
 	})
 }));
 
-
+	
 class DeviceCard extends React.Component{
 	constructor(props){
 		super(props);
@@ -47,10 +47,10 @@ class DeviceCard extends React.Component{
 			TempExpanded: true, HumExpanded: true, PM25Expanded: true, SoundExpanded: true
     }
 		
-		this.handleTempExpandClick = this.handleTempExpandClick.bind(this);
-		this.handleHumExpandClick = this.handleHumExpandClick.bind(this);
-		this.handlePMExpandClick = this.handlePMExpandClick.bind(this);
-		this.handleSoundExpandClick = this.handleSoundExpandClick.bind(this);
+		// this.handleTempExpandClick = this.handleTempExpandClick.bind(this);
+		// this.handleHumExpandClick = this.handleHumExpandClick.bind(this);
+		// this.handlePMExpandClick = this.handlePMExpandClick.bind(this);
+		// this.handleSoundExpandClick = this.handleSoundExpandClick.bind(this);
 	}
 	
 	componentDidMount(){
@@ -112,10 +112,10 @@ class DeviceCard extends React.Component{
 		return[...currentData,  {x: new Date(), y: payloadAttributeData}]
 	}
 	
-	handleTempExpandClick(){this.setState(prevState => ({TempExpanded: !prevState.TempExpanded}));}
-	handleHumExpandClick(){this.setState(prevState => ({HumExpanded: !prevState.HumExpanded}));}
-	handlePMExpandClick(){this.setState(prevState => ({PM25Expanded: !prevState.PM25Expanded}));}
-	handleSoundExpandClick(){this.setState(prevState => ({SoundExpanded: !prevState.SoundExpanded}));}
+	// handleTempExpandClick(){this.setState(prevState => ({TempExpanded: !prevState.TempExpanded}));}
+	// handleHumExpandClick(){this.setState(prevState => ({HumExpanded: !prevState.HumExpanded}));}
+	// handlePMExpandClick(){this.setState(prevState => ({PM25Expanded: !prevState.PM25Expanded}));}
+	// handleSoundExpandClick(){this.setState(prevState => ({SoundExpanded: !prevState.SoundExpanded}));}
 	
 	render () {
 		return (
