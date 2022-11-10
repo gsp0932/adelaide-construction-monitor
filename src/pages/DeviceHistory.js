@@ -106,7 +106,9 @@ class DeviceHistory extends React.Component {
             <ul>
               {this.state.history_data_response.map(e => (
                 <li key={e.sample_time}>
-                  {JSON.stringify(e.data_temp)}
+                  {new Date(parseInt(JSON.stringify(e.sample_time).slice(6, -2))*1000).toLocaleString()}
+                   - 
+                  {JSON.stringify(e.data_temp).slice(6, -2)}
                 </li>
               ))}
             </ul>
