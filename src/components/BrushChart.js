@@ -1,5 +1,7 @@
+import { Box } from '@mui/system';
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
+
 function generateDayWiseTimeSeries(baseval, count, yrange) {
   var i = 0;
   var series = [];
@@ -40,6 +42,7 @@ class BrushChart extends React.Component {
 				data: vibration_data,
 				color: '#A020F0'
 			}],
+			
 			options: {
 				chart: {
 					id: 'chart2',
@@ -71,6 +74,7 @@ class BrushChart extends React.Component {
 			seriesLine: [{
 				data: acoustic_data
 			}],
+			
 			optionsLine: {
 				chart: {
 					id: 'chart1',
@@ -115,24 +119,17 @@ class BrushChart extends React.Component {
 
 	render() {
 		return (
-			
-
-<div id="wrapper">
-<div id="chart-line2">
-<ReactApexChart options={this.state.options} series={this.state.series} type="line" height={230} width={400}/>
-</div>
-<div id="chart-line">
-<ReactApexChart options={this.state.optionsLine} series={this.state.seriesLine} type="area" height={130} width={400}/>
-</div>
-</div>
-
-
+			<div id="wrapper">
+				<div id="chart-line2">
+					<ReactApexChart options={this.props.options} series={this.props.series} type="line" height={230} width={400}/>
+				</div>
+				<div id="chart-line">
+					<ReactApexChart options={this.props.optionsLine} series={this.props.seriesLine} type="area" height={130} width={400}/>
+				</div>
+			</div>
 		);
 	}
 }
-
-
-      
 
 
 export default BrushChart;

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { PubSub } from 'aws-amplify';
 import RealtimeLineChart from './RealtimeLineChart';
-import {tempRadialChartOption, humRadialChartOption, pmRadialChartOption, soundRadialStroke, vibrationRadialStroke} from './DeviceCardChartOptions';
+import {tempRadialChartOption, humRadialChartOption, pmRadialChartOption, soundRadialStroke, vibrationRadialStroke} from './ChartOptions';
 import ReactApexChart from "react-apexcharts";
 
 import Box from '@mui/material/Box';

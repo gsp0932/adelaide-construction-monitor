@@ -14,6 +14,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import Select from '@mui/material/Select';
 import { FormControl, InputLabel, MenuItem } from '@mui/material';
 
+import {vibAndSoundBrushOption, tempHumPMBrushOption} from '../components/ChartOptions';
+
 class DeviceHistory extends React.Component {
   constructor(props){
     super(props);
@@ -22,10 +24,48 @@ class DeviceHistory extends React.Component {
       datetime_to: moment().format(),
       display_by: "Date-time",
       
-      dynamo_history_api: "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/demo-01/1668060174/1668060359",
+      dynamo_history_api: "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/demo-01/1668060155/1668098004",
       error: null,
       isLoaded: false,
-      history_data_response: []
+      
+      history_data_items: [],
+      
+      testCounter: 0,
+      
+      propsTempHumPM: {
+        series: [{
+          name: 'Temperature (C)',
+          data: [],
+        },
+        {
+          name: 'Humidity (%)',
+          data: [],
+        },
+        {
+          name: 'PM25 (mm)',
+          data: [],
+        }],
+        seriesLine: [{
+          data: [],
+        }],
+        options: vibAndSoundBrushOption.options,
+        optionsLine: vibAndSoundBrushOption.optionsLine
+      },
+      propsVibAndSound: {
+        series: [{
+          name: 'Acoustic (-dB)',
+          data: [],
+        },
+        {
+          name: 'Vibration (hz)',
+          data: [],
+        }],
+        seriesLine: [{
+          data: [],
+        }],
+        options: vibAndSoundBrushOption.options,
+        optionsLine: vibAndSoundBrushOption.optionsLine
+      }
     }
     
     this.handleChangeFrom = this.handleChangeFrom.bind(this);
@@ -36,12 +76,66 @@ class DeviceHistory extends React.Component {
   handleChangeFrom(new_datetime_from){
     this.setState({datetime_from: new_datetime_from});
   }
+  
   handleChangeTo(new_datetime_to){
     this.setState({datetime_to: new_datetime_to});
   }
   // handleChangeDisplayBy(event){
   //   this.setState({display_by: event.target.value})
   // }
+  
+  setAttributeSeries(history_data_items){
+    let temp_series = [];
+    let humid_series = [];
+    let pm25_series = [];
+    let vib_series = [];
+    let sound_series = [];
+    history_data_items.forEach((e)=>{
+      let timestamp = new Date(parseInt(JSON.stringify(e.sample_time).slice(6, -2))*1000).getTime();
+      temp_series.push([timestamp, parseInt(JSON.stringify(e.data_temp).slice(6,-2))]);
+      humid_series.push([timestamp, parseInt(JSON.stringify(e.data_humid).slice(6,-2))]);
+      pm25_series.push([timestamp, parseInt(JSON.stringify(e.data_pm25).slice(6,-2))]);
+      vib_series.push([timestamp, parseInt(JSON.stringify(e.data_vib).slice(6,-2))]);
+      sound_series.push([timestamp, parseInt(JSON.stringify(e.data_vib).slice(6,-2))]);
+      });
+    
+    this.setState({
+      propsTempHumPM: {
+        series: [{
+          name: 'Temperature (C)',
+          data: temp_series,
+        },
+        {
+          name: 'Humidity (%)',
+          data: humid_series,
+        },
+        {
+          name: 'PM25 (mm)',
+          data: pm25_series,
+        }],
+        seriesLine: [{
+          data: temp_series,
+        }],
+        options: tempHumPMBrushOption.options,
+        optionsLine: tempHumPMBrushOption.optionsLine
+      },
+      propsVibAndSound: {
+        series: [{
+          name: 'Acoustic (-dB)',
+          data: vib_series,
+        },
+        {
+          name: 'Vibration (hz)',
+          data: sound_series,
+        }],
+        seriesLine: [{
+          data: vib_series,
+        }],
+        options: vibAndSoundBrushOption.options,
+        optionsLine: vibAndSoundBrushOption.optionsLine
+      }
+    });
+  }
   
   componentDidMount(){
     fetch(this.state.dynamo_history_api)
@@ -50,8 +144,11 @@ class DeviceHistory extends React.Component {
       (result) => {
         this.setState({
           isLoaded: true,
-          history_data_response: result.Items
+          history_data_items: result.Items,
         });
+        this.setAttributeSeries(this.state.history_data_items);
+        console.log('a'+this.state.testCounter);
+        // console.log(typeof(this.state.propsVibAndSound));
       },
       (error) => {
         this.setState({
@@ -59,8 +156,9 @@ class DeviceHistory extends React.Component {
           error
         });
       }
-    )
+      );
   }
+  
   
   render(){
     return (
@@ -101,17 +199,22 @@ class DeviceHistory extends React.Component {
               </Select>
             </FormControl> */}
             </Box>
-            <MixedChart/>
-            <BrushChart/>
-            <ul>
-              {this.state.history_data_response.map(e => (
+            {/* <MixedChart/> */}
+            <Box>
+              <BrushChart {...this.state.propsTempHumPM}/>
+            </Box>
+            <Box>
+              <BrushChart {...this.state.propsVibAndSound}/>
+            </Box>
+            {/* <ul>
+              {this.state.history_data_items.map(e => (
                 <li key={e.sample_time}>
                   {new Date(parseInt(JSON.stringify(e.sample_time).slice(6, -2))*1000).toLocaleString()}
                    - 
                   {JSON.stringify(e.data_temp).slice(6, -2)}
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </Box>
         </Grid>
       </Grid>

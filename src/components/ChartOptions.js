@@ -1,3 +1,4 @@
+// ------------------ DEVICE CARD CHARTS OPTIONS ------------------
 export var tempRadialChartOption =
 	{
 		plotOptions: {
@@ -70,8 +71,7 @@ export var tempRadialChartOption =
 			lineCap: 'round'
 		},
 		labels: [String.fromCodePoint(8451)],
-	}
-	
+}
 
 export var humRadialChartOption =
 {
@@ -320,4 +320,138 @@ export var vibrationRadialStroke =
 }
 
 
+// ------------------ DEVICE HISTORY CHARTS OPTIONS ------------------
 
+export var tempHumPMBrushOption = {
+	options: {
+		chart: {
+			id: 'chart1',
+			type: 'line',
+			height: 230,
+			toolbar: {
+				autoSelected: 'pan',
+				show: false
+			}
+		},
+		colors: ['#FF5349','#008FFB', '#FFA500'],
+		stroke: {
+			width: 3
+		},
+		dataLabels: {
+			enabled: false
+		},
+		fill: {
+			opacity: 1
+		},
+		markers: {
+			size: 0
+		},
+		xaxis: {
+			type: 'datetime'
+		}
+	},
+	
+	optionsLine: {
+		chart: {
+			id: 'chart2',
+			height: 130,
+			type: 'area',
+			brush: {
+				target: 'chart1',
+				enabled: true
+			},
+			selection: {
+				enabled: true,
+				xaxis: {
+					min: new Date().getTime()-3600*12000,
+					max: new Date().getTime()
+				}
+			},
+		},
+		colors: ['#FF5349'],
+		fill: {
+			type: 'gradient',
+			gradient: {
+				opacityFrom: 0.91,
+				opacityTo: 0.1
+			}
+		},
+		xaxis: {
+			type: 'datetime',
+			tooltip: {
+				enabled: false
+			}
+		},
+		yaxis: {
+			tickAmount: 2
+		}
+	}
+	
+}
+
+export var vibAndSoundBrushOption = {
+	options: {
+		chart: {
+			id: 'chart3',
+			type: 'line',
+			height: 230,
+			toolbar: {
+				autoSelected: 'pan',
+				show: false
+			}
+		},
+		colors: ['#00FFFF','#A020F0'],
+		stroke: {
+			width: 3
+		},
+		dataLabels: {
+			enabled: false
+		},
+		fill: {
+			opacity: 1
+		},
+		markers: {
+			size: 0
+		},
+		xaxis: {
+			type: 'datetime'
+		}
+	},
+	
+	optionsLine: {
+		chart: {
+			id: 'chart4',
+			height: 130,
+			type: 'area',
+			brush: {
+				target: 'chart3',
+				enabled: true
+			},
+			selection: {
+				enabled: true,
+				xaxis: {
+					min: new Date().getTime()-3600*12000,
+					max: new Date().getTime()
+				}
+			},
+		},
+		colors: ['#008FFB'],
+		fill: {
+			type: 'gradient',
+			gradient: {
+				opacityFrom: 0.91,
+				opacityTo: 0.1
+			}
+		},
+		xaxis: {
+			type: 'datetime',
+			tooltip: {
+				enabled: false
+			}
+		},
+		yaxis: {
+			tickAmount: 2
+		}
+	}
+	
+}
