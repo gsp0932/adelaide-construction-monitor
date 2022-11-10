@@ -191,7 +191,7 @@ class DeviceHistory extends React.Component {
               }
             },
           },
-          colors: ['#008FFB'],
+          colors: ['#00FFFF'],
           fill: {
             type: 'gradient',
             gradient: {
