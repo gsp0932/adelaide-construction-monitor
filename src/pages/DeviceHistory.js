@@ -8,7 +8,7 @@ import { BackButton } from '../components/BackButton';
 import moment from 'moment';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import TextField from '@mui/material/TextField';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 
 import Select from '@mui/material/Select';
@@ -20,23 +20,46 @@ class DeviceHistory extends React.Component {
     this.state = {
       datetime_from: moment().format(),
       datetime_to: moment().format(),
-      display_by: "Date-time"
+      display_by: "Date-time",
+      
+      dynamo_history_api: "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/demo-01/1668060174/1668060359",
+      error: null,
+      isLoaded: false,
+      history_data_response: []
     }
     
     this.handleChangeFrom = this.handleChangeFrom.bind(this);
     this.handleChangeTo = this.handleChangeTo.bind(this);
-    this.handleChangeDisplayBy = this.handleChangeDisplayBy.bind(this);
+    // this.handleChangeDisplayBy = this.handleChangeDisplayBy.bind(this);
   }
   
-  handleChangeFrom(event){
-    this.setState({datetime_from: event.target.value});
+  handleChangeFrom(new_datetime_from){
+    this.setState({datetime_from: new_datetime_from});
   }
-  handleChangeTo(event){
-    this.setState({datetime_to: event.target.value});
+  handleChangeTo(new_datetime_to){
+    this.setState({datetime_to: new_datetime_to});
   }
-
-  handleChangeDisplayBy(event){
-    this.setState({display_by: event.target.value})
+  // handleChangeDisplayBy(event){
+  //   this.setState({display_by: event.target.value})
+  // }
+  
+  componentDidMount(){
+    fetch(this.state.dynamo_history_api)
+    .then(response => response.json())
+    .then(
+      (result) => {
+        this.setState({
+          isLoaded: true,
+          history_data_response: result.Items
+        });
+      },
+      (error) => {
+        this.setState({
+          isLoaded: true,
+          error
+        });
+      }
+    )
   }
   
   render(){
@@ -49,7 +72,7 @@ class DeviceHistory extends React.Component {
               <div style={{fontSize: '22px', fontWeight:'bold', color: 'black', padding: '15px', marginLeft: '5px'} }>construction_esp32</div>
               <div style={{fontSize: '17px', color: 'black', padding: '15px'} }>Building 21</div>
             </Box>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
               <DateTimePicker label="From" 
               value={this.state.datetime_from} 
               onChange={this.handleChangeFrom} 
@@ -57,14 +80,14 @@ class DeviceHistory extends React.Component {
               />
             </LocalizationProvider>
             <Box>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
               <DateTimePicker label="To" 
               value={this.state.datetime_to} 
               onChange={this.handleChangeTo} 
               renderInput={(params)=><TextField {...params}/>}
               />
             </LocalizationProvider>              
-            <FormControl fullWidth>
+            {/* <FormControl fullWidth>
               <InputLabel>Display by</InputLabel>
               <Select
                 value={this.state.display_by}
@@ -76,10 +99,17 @@ class DeviceHistory extends React.Component {
                 <MenuItem value={"Date"}>Date</MenuItem>
                 <MenuItem value={"Date-time"}>Date-time</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
             </Box>
             <MixedChart/>
             <BrushChart/>
+            <ul>
+              {this.state.history_data_response.map(e => (
+                <li key={e.sample_time}>
+                  {JSON.stringify(e.data_temp)}
+                </li>
+              ))}
+            </ul>
           </Box>
         </Grid>
       </Grid>

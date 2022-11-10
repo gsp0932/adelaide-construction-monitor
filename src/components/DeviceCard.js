@@ -8,12 +8,9 @@ import Box from '@mui/material/Box';
 
 import { Button, Collapse, Divider, IconButton, ToggleButton } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
-import HistoryIcon from '@mui/icons-material/History';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import Switch from '@mui/material/Switch';
 import {styled} from '@mui/material/styles';
 import {HistoryButton} from './HistoryButton';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import Grid from '@mui/material/Grid';
 
