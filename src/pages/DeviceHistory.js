@@ -24,7 +24,12 @@ class DeviceHistory extends React.Component {
       datetime_to: moment().format(),
       display_by: "Date-time",
       
-      dynamo_history_api: "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/demo-01/1668060155/1668098004",
+      dynamo_history_api: 
+      "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/demo-01/"+
+      "1668060155" + "/" 
+      + new Date().getTime()
+      //  "1668098004"
+      ,
       error: null,
       isLoaded: false,
       
@@ -104,10 +109,12 @@ class DeviceHistory extends React.Component {
         series: [{
           name: 'Temperature (C)',
           data: temp_series,
+          type: 'column'
         },
         {
           name: 'Humidity (%)',
           data: humid_series,
+          // type: 'column'
         },
         {
           name: 'PM25 (mm)',
@@ -117,12 +124,47 @@ class DeviceHistory extends React.Component {
           data: temp_series,
         }],
         options: tempHumPMBrushOption.options,
-        optionsLine: tempHumPMBrushOption.optionsLine
+        optionsLine: {
+          chart: {
+            id: 'chart2',
+            height: 130,
+            type: 'area',
+            brush: {
+              target: 'chart1',
+              enabled: true
+            },
+            selection: {
+              enabled: true,
+              xaxis: {
+                min: new Date().getTime()-3600*6000,
+                max: new Date().getTime()-3600*3000
+              }
+            },
+          },
+          colors: ['#FF5349'],
+          fill: {
+            type: 'gradient',
+            gradient: {
+              opacityFrom: 0.91,
+              opacityTo: 0.1
+            }
+          },
+          xaxis: {
+            type: 'datetime',
+            tooltip: {
+              enabled: false
+            }
+          },
+          yaxis: {
+            tickAmount: 2
+          }
+        }
       },
       propsVibAndSound: {
         series: [{
           name: 'Acoustic (-dB)',
           data: vib_series,
+          type: 'column'
         },
         {
           name: 'Vibration (hz)',
@@ -132,7 +174,41 @@ class DeviceHistory extends React.Component {
           data: vib_series,
         }],
         options: vibAndSoundBrushOption.options,
-        optionsLine: vibAndSoundBrushOption.optionsLine
+        optionsLine: {
+          chart: {
+            id: 'chart4',
+            height: 130,
+            type: 'area',
+            brush: {
+              target: 'chart3',
+              enabled: true
+            },
+            selection: {
+              enabled: true,
+              xaxis: {
+                min: new Date().getTime()-3600*6000,
+                max: new Date().getTime()-3600*3000
+              }
+            },
+          },
+          colors: ['#008FFB'],
+          fill: {
+            type: 'gradient',
+            gradient: {
+              opacityFrom: 0.91,
+              opacityTo: 0.1
+            }
+          },
+          xaxis: {
+            type: 'datetime',
+            tooltip: {
+              enabled: false
+            }
+          },
+          yaxis: {
+            tickAmount: 2
+          }
+        }
       }
     });
   }
@@ -169,36 +245,43 @@ class DeviceHistory extends React.Component {
               <BackButton/>
               <div style={{fontSize: '22px', fontWeight:'bold', color: 'black', padding: '15px', marginLeft: '5px'} }>construction_esp32</div>
               <div style={{fontSize: '17px', color: 'black', padding: '15px'} }>Building 21</div>
+            </Box >
+            
+            <Box display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center">
+              <Box maxWidth={180}>
+                <LocalizationProvider dateAdapter={AdapterMoment}>
+                  <DateTimePicker label="From"
+                  value={this.state.datetime_from} 
+                  onChange={this.handleChangeFrom} 
+                  renderInput={(params)=><TextField {...params}/>}
+                  />
+                </LocalizationProvider>
+              </Box>
+            
+              <Box maxWidth={180}>
+                <LocalizationProvider dateAdapter={AdapterMoment}>
+                  <DateTimePicker label="To" 
+                  value={this.state.datetime_to} 
+                  onChange={this.handleChangeTo} 
+                  renderInput={(params)=><TextField {...params}/>}
+                  />
+                </LocalizationProvider>              
+              </Box>
+              {/* <FormControl fullWidth>
+                <InputLabel>Display by</InputLabel>
+                <Select
+                  value={this.state.display_by}
+                  label="Display by"
+                  onChange={this.handleChangeDisplayBy}
+                >
+                  <MenuItem value={"Year"}>Year</MenuItem>
+                  <MenuItem value={"Month"}>Month</MenuItem>
+                  <MenuItem value={"Date"}>Date</MenuItem>
+                  <MenuItem value={"Date-time"}>Date-time</MenuItem>
+                </Select>
+              </FormControl> */}
             </Box>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DateTimePicker label="From" 
-              value={this.state.datetime_from} 
-              onChange={this.handleChangeFrom} 
-              renderInput={(params)=><TextField {...params}/>}
-              />
-            </LocalizationProvider>
-            <Box>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DateTimePicker label="To" 
-              value={this.state.datetime_to} 
-              onChange={this.handleChangeTo} 
-              renderInput={(params)=><TextField {...params}/>}
-              />
-            </LocalizationProvider>              
-            {/* <FormControl fullWidth>
-              <InputLabel>Display by</InputLabel>
-              <Select
-                value={this.state.display_by}
-                label="Display by"
-                onChange={this.handleChangeDisplayBy}
-              >
-                <MenuItem value={"Year"}>Year</MenuItem>
-                <MenuItem value={"Month"}>Month</MenuItem>
-                <MenuItem value={"Date"}>Date</MenuItem>
-                <MenuItem value={"Date-time"}>Date-time</MenuItem>
-              </Select>
-            </FormControl> */}
-            </Box>
+            
             {/* <MixedChart/> */}
             <Box>
               <BrushChart {...this.state.propsTempHumPM}/>

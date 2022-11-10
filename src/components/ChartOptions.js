@@ -326,7 +326,7 @@ export var tempHumPMBrushOption = {
 	options: {
 		chart: {
 			id: 'chart1',
-			type: 'line',
+			type: 'column',
 			height: 230,
 			toolbar: {
 				autoSelected: 'pan',
@@ -363,7 +363,7 @@ export var tempHumPMBrushOption = {
 			selection: {
 				enabled: true,
 				xaxis: {
-					min: new Date().getTime()-3600*12000,
+					min: new Date().getTime()-3600*1000,
 					max: new Date().getTime()
 				}
 			},
@@ -430,7 +430,7 @@ export var vibAndSoundBrushOption = {
 			selection: {
 				enabled: true,
 				xaxis: {
-					min: new Date().getTime()-3600*12000,
+					min: new Date().getTime()-3600*1000,
 					max: new Date().getTime()
 				}
 			},
