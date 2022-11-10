@@ -25,10 +25,12 @@ class DeviceHistory extends React.Component {
       display_by: "Date-time",
       
       dynamo_history_api: 
-      "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/demo-01/"+
-      "1668060155" + "/" 
-      + new Date().getTime()
-      //  "1668098004"
+      "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/demo-01/"
+      + "1668060155"
+      // + new Date().getTime() -86400000
+      + "/" 
+      // + new Date().getTime()
+      + "1668108562"
       ,
       error: null,
       isLoaded: false,
@@ -136,8 +138,10 @@ class DeviceHistory extends React.Component {
             selection: {
               enabled: true,
               xaxis: {
-                min: new Date().getTime()-3600*6000,
-                max: new Date().getTime()-3600*3000
+                // min: new Date().getTime()-3600*6000,
+                // max: new Date().getTime()-3600*3000
+                min: 1668108562*1000-3600*6000,
+                max: 1668108562*1000-3600*3000
               }
             },
           },
@@ -186,8 +190,10 @@ class DeviceHistory extends React.Component {
             selection: {
               enabled: true,
               xaxis: {
-                min: new Date().getTime()-3600*6000,
-                max: new Date().getTime()-3600*3000
+                // min: new Date().getTime()-3600*6000,
+                // max: new Date().getTime()-3600*3000
+                min: 1668108562*1000-3600*6000,
+                max: 1668108562*1000-3600*3000
               }
             },
           },
