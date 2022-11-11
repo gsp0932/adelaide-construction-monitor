@@ -220,25 +220,23 @@ class DeviceHistory extends React.Component {
   }
   
   componentDidMount(){
+    
+    
     fetch(this.state.dynamo_history_api)
     .then(response => response.json())
     .then(
       (result) => {
-        this.setState({
-          isLoaded: true,
-          history_data_items: result.Items,
-        });
-        this.setAttributeSeries(this.state.history_data_items);
-        console.log('a'+this.state.testCounter);
-        // console.log(typeof(this.state.propsVibAndSound));
+        this.setAttributeSeries(result.Items);
       },
       (error) => {
         this.setState({
           isLoaded: true,
           error
         });
+        console.log(error);
       }
       );
+      
   }
   
   
