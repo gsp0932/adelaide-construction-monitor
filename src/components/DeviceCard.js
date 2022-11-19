@@ -13,6 +13,7 @@ import {styled} from '@mui/material/styles';
 import {HistoryButton} from './HistoryButton';
 
 import Grid from '@mui/material/Grid';
+import {flushSync} from 'react-dom';
 
 // Time range real-time chart
 const TIME_RANGE_IN_MILLISECONDS = 30 * 1000;
@@ -50,9 +51,11 @@ class DeviceCard extends React.Component{
 		// this.handleSoundExpandClick = this.handleSoundExpandClick.bind(this);
 	}
 	
+	
+	
 	componentDidMount(){
+
     // Handle MQTT payload and trigger rerendering with setstate
-    // PubSub.subscribe('real-time-monitor').subscribe({
 			let device_data_publish = '$aws/things/' +  this.state.deviceID + '/shadow/update';
 			PubSub.subscribe(device_data_publish).subscribe({
 			next: data => 
@@ -62,36 +65,33 @@ class DeviceCard extends React.Component{
       message = JSON.stringify(data);
       // Grep message content and convert to object
       let message_object = JSON.parse(message.substring(message.indexOf('value')+7).slice(0,-1));
-			// The two following lines below for MQTT parsing debugging
-			// console.log(message);
-			// console.log(message_object.state.reported.data[0]);
 			
 			// Loop through data array
+			// Has to be nested inside subcribe as an asynchronous call, otherwise, won't trigger rerendering chart.
+			// Push device data to each type of charts
+			this.setState({IoT_payload_object:message_object});
 			for (let i = 0; i < message_object.state.reported.data.length; i++){
-				this.setState({
-					IoT_payload_object:message_object, 
-					IoT_device_data: message_object.state.reported.data[i], 
-					current_datalist_timestamp: message_object.state.reported.data[i].data_timestamp});
-				// Has to be nested inside subcribe as an asyncrhonous call, otherwise, won't trigger rerendering chart.
-				// Push device data to each type of charts
-				this.setState({currentTemp: [message_object.state.reported.data[i].temp]});
-				this.setState({currentHum: [message_object.state.reported.data[i].humid]});
-				this.setState({currentPM25: [message_object.state.reported.data[i].pm25]});
-				this.setState({currentSound: [message_object.state.reported.data[i].sound]});
-				this.setState({currentVibration: [message_object.state.reported.data[i].vib]});
-				this.setState({tempDatalist: this.setDataList(this.state.tempDatalist,message_object.state.reported.data[i].temp)});
-				this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
-				this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
-				if (i !== message_object.state.reported.data.length - 1){
-					setTimeout(()=>{}, message_object.state.reported.data[i+1].data_timestamp - this.state.current_datalist_timestamp);
-				}
+				this.setState({IoT_device_data: message_object.state.reported.data[i]});
+				this.setState({current_datalist_timestamp: message_object.state.reported.data[i].data_timestamp});
+				setTimeout(()=>{
+					this.setState({deviceID: message_object.state.reported.data[0].deviceId})
+					this.setState({currentTemp: [message_object.state.reported.data[i].temp]});
+					this.setState({currentHum: [message_object.state.reported.data[i].humid]});
+					this.setState({currentPM25: [message_object.state.reported.data[i].pm25]});
+					this.setState({currentSound: [message_object.state.reported.data[i].sound]});
+					this.setState({currentVibration: [message_object.state.reported.data[i].vib]});
+					this.setState({tempDatalist: this.setDataList(this.state.tempDatalist, message_object.state.reported.data[i].temp)});
+					this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
+					this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
+					// ! clearThe line below is really important.
+				}, i*1000);
 			}
-			
 			
 			},
       error: error => console.error(error),
       close: () => console.log('Done'),
   });
+	
 			
   }
   

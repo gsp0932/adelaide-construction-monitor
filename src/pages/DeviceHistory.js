@@ -35,8 +35,6 @@ class DeviceHistory extends React.Component {
       error: null,
       isLoaded: false,
       
-      history_data_items: [],
-      
       testCounter: 0,
       
       propsTempHumPM: {
@@ -258,6 +256,7 @@ class DeviceHistory extends React.Component {
                   value={this.state.datetime_from} 
                   onChange={this.handleChangeFrom} 
                   renderInput={(params)=><TextField {...params}/>}
+                  ampm={false}
                   />
                 </LocalizationProvider>
               </Box>
@@ -268,6 +267,7 @@ class DeviceHistory extends React.Component {
                   value={this.state.datetime_to} 
                   onChange={this.handleChangeTo} 
                   renderInput={(params)=><TextField {...params}/>}
+                  ampm={false}
                   />
                 </LocalizationProvider>              
               </Box>
@@ -288,10 +288,10 @@ class DeviceHistory extends React.Component {
             
             {/* <MixedChart/> */}
             <Box>
-              <BrushChart {...this.state.propsTempHumPM}/>
+              <BrushChart  {...this.state.propsVibAndSound}/>
             </Box>
             <Box>
-              <BrushChart {...this.state.propsVibAndSound}/>
+              <BrushChart  {...this.state.propsTempHumPM}/>
             </Box>
             {/* <ul>
               {this.state.history_data_items.map(e => (
