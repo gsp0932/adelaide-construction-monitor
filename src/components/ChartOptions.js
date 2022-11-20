@@ -188,7 +188,7 @@ export var pmRadialChartOption =
 					offsetY: -9,
 					show: true,
 					color: '#888',
-					fontSize: '10px'
+					fontSize: '11px'
 				},
 				value: {
 					formatter: function(val) {
@@ -218,7 +218,7 @@ export var pmRadialChartOption =
 	stroke: {
 		lineCap: 'round'
 	},
-	labels: ['AQI'],
+	labels: ['\xB5g/m\xB3'],
 }
 
 export var soundRadialStroke =
@@ -247,7 +247,7 @@ export var soundRadialStroke =
 					fontSize: '22px',
 					color: undefined,
 					formatter: function (val) {
-						return -val;
+						return val;
 					}
 				}
 			}
@@ -267,7 +267,7 @@ export var soundRadialStroke =
 	stroke: {
 		dashArray: 4
 	},
-	labels: ['dB'],
+	labels: ['dB (SPL)'],
 }
 
 export var vibrationRadialStroke =
@@ -316,7 +316,7 @@ export var vibrationRadialStroke =
 	stroke: {
 		dashArray: 4
 	},
-	labels: ['Hz'],
+	labels: ['g'],
 }
 
 
@@ -392,9 +392,9 @@ export var tempHumPMBrushOption = {
 export var vibAndSoundBrushOption = {
 	options: {
 		chart: {
-			id: 'chart3',
-			type: 'line',
-			height: 230,
+			id: 'chart4',
+			type: 'column',
+			height: 30,
 			toolbar: {
 				autoSelected: 'pan',
 				show: false
@@ -420,11 +420,11 @@ export var vibAndSoundBrushOption = {
 	
 	optionsLine: {
 		chart: {
-			id: 'chart4',
+			id: 'chart3',
 			height: 130,
 			type: 'area',
 			brush: {
-				target: 'chart3',
+				target: 'chart4',
 				enabled: true
 			},
 			selection: {

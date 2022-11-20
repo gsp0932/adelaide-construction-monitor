@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { PubSub } from 'aws-amplify';
 import RealtimeLineChart from './RealtimeLineChart';
 import {tempRadialChartOption, humRadialChartOption, pmRadialChartOption, soundRadialStroke, vibrationRadialStroke} from './ChartOptions';
@@ -83,10 +83,11 @@ class DeviceCard extends React.Component{
 					this.setState({tempDatalist: this.setDataList(this.state.tempDatalist, message_object.state.reported.data[i].temp)});
 					this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
 					this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
-					// ! clearThe line below is really important.
-				}, i*1000);
+					// The line below is really important.
+				// }, i*1000);
+				}, i*800);
 			}
-			
+			console.log(message_object);
 			},
       error: error => console.error(error),
       close: () => console.log('Done'),

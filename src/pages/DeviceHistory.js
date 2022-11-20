@@ -53,8 +53,8 @@ class DeviceHistory extends React.Component {
         seriesLine: [{
           data: [],
         }],
-        options: vibAndSoundBrushOption.options,
-        optionsLine: vibAndSoundBrushOption.optionsLine
+        options: tempHumPMBrushOption.options,
+        optionsLine: tempHumPMBrushOption.optionsLine
       },
       propsVibAndSound: {
         series: [{
@@ -126,7 +126,7 @@ class DeviceHistory extends React.Component {
         options: tempHumPMBrushOption.options,
         optionsLine: {
           chart: {
-            id: 'chart2',
+            id: 'chart4',
             height: 130,
             type: 'area',
             brush: {
@@ -178,11 +178,11 @@ class DeviceHistory extends React.Component {
         options: vibAndSoundBrushOption.options,
         optionsLine: {
           chart: {
-            id: 'chart4',
+            id: 'chart3',
             height: 130,
             type: 'area',
             brush: {
-              target: 'chart3',
+              target: 'chart4',
               enabled: true
             },
             selection: {
@@ -288,10 +288,10 @@ class DeviceHistory extends React.Component {
             
             {/* <MixedChart/> */}
             <Box>
-              <BrushChart  {...this.state.propsVibAndSound}/>
+              <BrushChart  {...this.state.propsTempHumPM}/>
             </Box>
             <Box>
-              <BrushChart  {...this.state.propsTempHumPM}/>
+              <BrushChart  {...this.state.propsVibAndSound}/>
             </Box>
             {/* <ul>
               {this.state.history_data_items.map(e => (
