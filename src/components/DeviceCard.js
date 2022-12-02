@@ -52,7 +52,6 @@ class DeviceCard extends React.Component{
 	}
 	
 	
-	
 	componentDidMount(){
 
     // Handle MQTT payload and trigger rerendering with setstate
@@ -67,7 +66,7 @@ class DeviceCard extends React.Component{
       let message_object = JSON.parse(message.substring(message.indexOf('value')+7).slice(0,-1));
 			
 			// Loop through data array
-			// Has to be nested inside subcribe as an asynchronous call, otherwise, won't trigger rerendering chart.
+			// Has to be nested inside subscribe as an asynchronous call, otherwise, won't trigger rerendering chart.
 			// Push device data to each type of charts
 			this.setState({IoT_payload_object:message_object});
 			for (let i = 0; i < message_object.state.reported.data.length; i++){
@@ -83,7 +82,7 @@ class DeviceCard extends React.Component{
 					this.setState({tempDatalist: this.setDataList(this.state.tempDatalist, message_object.state.reported.data[i].temp)});
 					this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
 					this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
-					// The line below is really important.
+					// The line below is really important. setTimeout is a non-blocking.
 				// }, i*1000);
 				}, i*800);
 			}

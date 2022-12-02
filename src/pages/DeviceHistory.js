@@ -27,7 +27,7 @@ class DeviceHistory extends React.Component {
       dynamo_history_api: 
       "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/demo-01/"
       + "1668060155"
-      // + new Date().getTime() -86400000
+      // + new Date().getTime() - 86400000
       + "/" 
       // + new Date().getTime()
       + "1668108562"
@@ -126,11 +126,11 @@ class DeviceHistory extends React.Component {
         options: tempHumPMBrushOption.options,
         optionsLine: {
           chart: {
-            id: 'chart4',
+            id: 'chart1',
             height: 130,
             type: 'area',
             brush: {
-              target: 'chart1',
+              target: 'chart2',
               enabled: true
             },
             selection: {
@@ -219,7 +219,6 @@ class DeviceHistory extends React.Component {
   
   componentDidMount(){
     
-    
     fetch(this.state.dynamo_history_api)
     .then(response => response.json())
     .then(
@@ -236,7 +235,6 @@ class DeviceHistory extends React.Component {
       );
       
   }
-  
   
   render(){
     return (
@@ -287,12 +285,14 @@ class DeviceHistory extends React.Component {
             </Box>
             
             {/* <MixedChart/> */}
+            
             <Box>
               <BrushChart  {...this.state.propsTempHumPM}/>
             </Box>
             <Box>
               <BrushChart  {...this.state.propsVibAndSound}/>
             </Box>
+            
             {/* <ul>
               {this.state.history_data_items.map(e => (
                 <li key={e.sample_time}>
