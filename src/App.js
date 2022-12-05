@@ -22,21 +22,39 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      addDeviceOpen : false,
-      
-      deviceIdList: ['demo-01','demo04']
+      add_device_open : false,
+      add_device_textfield_value: "",
+      device_id_list: ['demo-01', 'demo_1', 'demo_4','demo04']
     }
     
     this.handleClickAddDevice = this.handleClickAddDevice.bind(this);
     this.handleAddDeviceClose = this.handleAddDeviceClose.bind(this);
+    this.handleAddDeviceAdd = this.handleAddDeviceAdd.bind(this);
+    this.setNewDeviceID = this.setNewDeviceID.bind(this);
   }
   
   handleClickAddDevice(){
-    this.setState({addDeviceOpen: true})
+    this.setState({add_device_open: true})
+  }
+  
+  setNewDeviceID(event){
+    const {value} = event.target;
+    this.setState({add_device_textfield_value: value})
+    console.log(event.target);
+  }
+  
+  handleAddDeviceAdd(){
+    let newList = this.state.device_id_list;
+    newList.push(this.state.add_device_textfield_value);
+    this.setState({
+      device_id_list: newList,
+      add_device_open: false
+    })
+    console.log(this.state.add_device_textfield_value);
   }
   
   handleAddDeviceClose(){
-    this.setState({addDeviceOpen: false})
+    this.setState({add_device_open: false})
   }
       
   render(){
@@ -61,7 +79,7 @@ class App extends React.Component {
                   Add device
                 </Button>
                 
-                <Dialog open={this.state.addDeviceOpen} onClose={this.handleAddDeviceClose}>
+                <Dialog open={this.state.add_device_open} onClose={this.handleAddDeviceClose}>
                   <DialogTitle>
                     Add device
                   </DialogTitle>
@@ -75,21 +93,22 @@ class App extends React.Component {
                       label="Device ID"
                       type="string"
                       variant="standard"
+                      defaultValue={this.state.add_device_textfield_value}
+                      onChange={this.setNewDeviceID}
                     </TextField>
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={this.handleAddDeviceClose}> Close </Button>
-                    <Button onClick={this.handleAddDeviceClose}> Add </Button>
+                    <Button onClick={this.handleAddDeviceAdd}> Add </Button>
                   </DialogActions>
                 </Dialog>
               </div>
                 
             </Box>
             
-            <DeviceCard deviceID="demo-01"/>
-            <DeviceCard deviceID="demo_1"/>
-            <DeviceCard deviceID="demo_4"/>
-            <DeviceCard deviceID="demo04"/>
+              {this.state.device_id_list.map((deviceID)=>
+              <DeviceCard key={deviceID} deviceID={deviceID}/>
+              )}
             
             <Box height={50}></Box>
           
