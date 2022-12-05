@@ -35,7 +35,7 @@ class DeviceCard extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			deviceID: 'construction_esp32',
+			deviceID: props.deviceID,
 			currentTemp: [0], tempDatalist: [{name: "Temperature", data: []}],
 			currentHum: [0], humDatalist: [{name: "Humidity", data: []}],
 			currentPM25: [0], pmDatalist: [{name: "PM2.5", data: []}],
@@ -55,7 +55,7 @@ class DeviceCard extends React.Component{
 	componentDidMount(){
 
     // Handle MQTT payload and trigger rerendering with setstate
-			let device_data_publish = '$aws/things/' +  this.state.deviceID + '/shadow/update';
+			let device_data_publish = '$aws/things/' +  'construction_esp32' + '/shadow/update/' + this.state.deviceID;
 			PubSub.subscribe(device_data_publish).subscribe({
 			next: data => 
 			{
@@ -84,7 +84,7 @@ class DeviceCard extends React.Component{
 					this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
 					// The line below is really important. setTimeout is a non-blocking.
 				// }, i*1000);
-				}, i*800);
+				}, i*900);
 			}
 			console.log(message_object);
 			},
@@ -194,7 +194,7 @@ class DeviceCard extends React.Component{
 					<IconButton>
 						<SettingsIcon/>
 					</IconButton>
-					<HistoryButton/>
+					<HistoryButton deviceID={this.state.deviceID}/>
 					<Box style={{border: "1px solid #000", borderColor:"gray", borderRadius:30, overflow: "hidden", height: 30, width: 30, display: "flex", alignItems: "center", justifyContent: "center"}}>
 					<IconButton>
 						<PowerSettingsNewIcon/>

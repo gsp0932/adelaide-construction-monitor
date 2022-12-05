@@ -16,21 +16,33 @@ import { FormControl, InputLabel, MenuItem } from '@mui/material';
 
 import {vibAndSoundBrushOption, tempHumPMBrushOption} from '../components/ChartOptions';
 
+import {useParams} from "react-router";
+
 class DeviceHistory extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      datetime_from: moment().format(),
-      datetime_to: moment().format(),
+      datetime_from: moment().unix(),
+      datetime_to: moment().unix(),
       display_by: "Date-time",
       
-      dynamo_history_api: 
-      "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/demo-01/"
-      + "1668060155"
-      // + new Date().getTime() - 86400000
+      deviceid: this.props.params.deviceid,     // get deviceid from url
+      
+      dynamo_history_api_request: 
+      "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/"
+      +
+      this.props.params.deviceid
+      // + "/" 
+      // + "1670220412"
+      // + "/" 
+      // + "1670221447"
+      
+      // All use millisecond
       + "/" 
-      // + new Date().getTime()
-      + "1668108562"
+      + (moment().unix()-24*60*60) // Back to 1 day
+      + "/" 
+      + moment().unix()
+      
       ,
       error: null,
       isLoaded: false,
@@ -75,8 +87,8 @@ class DeviceHistory extends React.Component {
     
     this.handleChangeFrom = this.handleChangeFrom.bind(this);
     this.handleChangeTo = this.handleChangeTo.bind(this);
-    // this.handleChangeDisplayBy = this.handleChangeDisplayBy.bind(this);
   }
+  
   
   handleChangeFrom(new_datetime_from){
     this.setState({datetime_from: new_datetime_from});
@@ -95,8 +107,18 @@ class DeviceHistory extends React.Component {
     let pm25_series = [];
     let vib_series = [];
     let sound_series = [];
+    let max_timestamp = 0;
+    let min_timestamp = 0;
     history_data_items.forEach((e)=>{
       let timestamp = new Date(parseInt(JSON.stringify(e.sample_time).slice(6, -2))*1000).getTime();
+      
+      if (timestamp > max_timestamp){
+        max_timestamp = timestamp;
+      }
+      if (min_timestamp === 0 || timestamp < min_timestamp){
+        min_timestamp = timestamp;
+      }
+      
       temp_series.push([timestamp, parseInt(JSON.stringify(e.data_temp).slice(6,-2))]);
       humid_series.push([timestamp, parseInt(JSON.stringify(e.data_humid).slice(6,-2))]);
       pm25_series.push([timestamp, parseInt(JSON.stringify(e.data_pm25).slice(6,-2))]);
@@ -104,7 +126,10 @@ class DeviceHistory extends React.Component {
       sound_series.push([timestamp, parseInt(JSON.stringify(e.data_vib).slice(6,-2))]);
       });
     
+    
     this.setState({
+      datetime_from: min_timestamp/1000,
+      datetime_to: max_timestamp/1000,
       propsTempHumPM: {
         series: [{
           name: 'Temperature (C)',
@@ -136,10 +161,10 @@ class DeviceHistory extends React.Component {
             selection: {
               enabled: true,
               xaxis: {
-                // min: new Date().getTime()-3600*6000,
-                // max: new Date().getTime()-3600*3000
-                min: 1668108562*1000-3600*6000,
-                max: 1668108562*1000-3600*3000
+                // The apexchart use milliseconds format
+                // THE SELECTED ZONE HAVE TO BE INSIDE THE RETURNED DATA TIMEFRAME TO PREVENT UNDESIRED DISPLAY
+                min: min_timestamp,
+                max: max_timestamp
               }
             },
           },
@@ -188,10 +213,8 @@ class DeviceHistory extends React.Component {
             selection: {
               enabled: true,
               xaxis: {
-                // min: new Date().getTime()-3600*6000,
-                // max: new Date().getTime()-3600*3000
-                min: 1668108562*1000-3600*6000,
-                max: 1668108562*1000-3600*3000
+                min: min_timestamp,
+                max: max_timestamp
               }
             },
           },
@@ -213,13 +236,13 @@ class DeviceHistory extends React.Component {
             tickAmount: 2
           }
         }
-      }
+      },
     });
   }
   
   componentDidMount(){
     
-    fetch(this.state.dynamo_history_api)
+    fetch(this.state.dynamo_history_api_request)
     .then(response => response.json())
     .then(
       (result) => {
@@ -233,7 +256,6 @@ class DeviceHistory extends React.Component {
         console.log(error);
       }
       );
-      
   }
   
   render(){
@@ -243,7 +265,9 @@ class DeviceHistory extends React.Component {
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
             <Box display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center" width="400px" margin="10px">
               <BackButton/>
-              <div style={{fontSize: '22px', fontWeight:'bold', color: 'black', padding: '15px', marginLeft: '5px'} }>construction_esp32</div>
+              <div style={{fontSize: '22px', fontWeight:'bold', color: 'black', padding: '15px', marginLeft: '5px'} }>
+                {this.state.deviceid}
+              </div>
               <div style={{fontSize: '17px', color: 'black', padding: '15px'} }>Building 21</div>
             </Box >
             
@@ -251,7 +275,7 @@ class DeviceHistory extends React.Component {
               <Box maxWidth={180}>
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                   <DateTimePicker label="From"
-                  value={this.state.datetime_from} 
+                  value={moment.unix(this.state.datetime_from).format('DD-MM-YYYY HH:mm')} 
                   onChange={this.handleChangeFrom} 
                   renderInput={(params)=><TextField {...params}/>}
                   ampm={false}
@@ -262,7 +286,7 @@ class DeviceHistory extends React.Component {
               <Box maxWidth={180}>
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                   <DateTimePicker label="To" 
-                  value={this.state.datetime_to} 
+                  value={moment.unix(this.state.datetime_to).format('DD-MM-YYYY HH:mm')} 
                   onChange={this.handleChangeTo} 
                   renderInput={(params)=><TextField {...params}/>}
                   ampm={false}
@@ -309,4 +333,9 @@ class DeviceHistory extends React.Component {
   }
 }
 
-export default DeviceHistory;
+export default (props) => (
+  <DeviceHistory 
+  {...props}
+  params={useParams()}
+  />
+);

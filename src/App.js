@@ -17,12 +17,14 @@ import { DialogContent, DialogContentText, DialogTitle, TextField, DialogActions
 AwsIoT_connect();
 
 
-// Main App
+// Main App - Homepage
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      addDeviceOpen : false
+      addDeviceOpen : false,
+      
+      deviceIdList: ['demo-01','demo04']
     }
     
     this.handleClickAddDevice = this.handleClickAddDevice.bind(this);
@@ -76,19 +78,21 @@ class App extends React.Component {
                     </TextField>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={this.handleAddDeviceClose}>
-                      Add
-                    </Button>
+                    <Button onClick={this.handleAddDeviceClose}> Close </Button>
+                    <Button onClick={this.handleAddDeviceClose}> Add </Button>
                   </DialogActions>
                 </Dialog>
               </div>
                 
             </Box>
             
-            <DeviceCard/>
+            <DeviceCard deviceID="demo-01"/>
+            <DeviceCard deviceID="demo_1"/>
+            <DeviceCard deviceID="demo_4"/>
+            <DeviceCard deviceID="demo04"/>
             
+            <Box height={50}></Box>
           
-              
           </Grid>
           
         

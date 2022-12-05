@@ -1,3 +1,5 @@
+import moment from "moment";
+
 // ------------------ DEVICE CARD CHARTS OPTIONS ------------------
 export var tempRadialChartOption =
 	{
@@ -363,8 +365,8 @@ export var tempHumPMBrushOption = {
 			selection: {
 				enabled: true,
 				xaxis: {
-					min: new Date().getTime()-3600*1000,
-					max: new Date().getTime()
+					min:(moment().unix() - 60*1000),
+					max: moment().unix()
 				}
 			},
 		},
@@ -430,8 +432,8 @@ export var vibAndSoundBrushOption = {
 			selection: {
 				enabled: true,
 				xaxis: {
-					min: new Date().getTime()-3600*1000,
-					max: new Date().getTime()
+					min:(moment().unix() - 60*1000),
+					max: moment().unix()
 				}
 			},
 		},
