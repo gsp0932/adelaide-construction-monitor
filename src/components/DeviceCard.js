@@ -55,8 +55,9 @@ class DeviceCard extends React.Component{
 	componentDidMount(){
 
     // Handle MQTT payload and trigger rerendering with setstate
-			let device_data_publish = '$aws/things/' +  'construction_esp32' + '/shadow/update/' + this.state.deviceID;
-			PubSub.subscribe(device_data_publish).subscribe({
+		// let device_data_publish = '$aws/things/' +  'construction_esp32' + '/shadow/update/' + this.state.deviceID;
+		let device_data_publish = '$aws/things/' +  'construction_esp32' + '/shadow/update'
+		PubSub.subscribe(device_data_publish).subscribe({
 			next: data => 
 			{
 			// Convert packet to string
@@ -69,24 +70,28 @@ class DeviceCard extends React.Component{
 			// Has to be nested inside subscribe as an asynchronous call, otherwise, won't trigger rerendering chart.
 			// Push device data to each type of charts
 			this.setState({IoT_payload_object:message_object});
-			for (let i = 0; i < message_object.state.reported.data.length; i++){
-				this.setState({IoT_device_data: message_object.state.reported.data[i]});
-				this.setState({current_datalist_timestamp: message_object.state.reported.data[i].data_timestamp});
-				setTimeout(()=>{
-					this.setState({deviceID: message_object.state.reported.data[0].deviceId})
-					this.setState({currentTemp: [message_object.state.reported.data[i].temp]});
-					this.setState({currentHum: [message_object.state.reported.data[i].humid]});
-					this.setState({currentPM25: [message_object.state.reported.data[i].pm25]});
-					this.setState({currentSound: [message_object.state.reported.data[i].sound]});
-					this.setState({currentVibration: [message_object.state.reported.data[i].vib]});
-					this.setState({tempDatalist: this.setDataList(this.state.tempDatalist, message_object.state.reported.data[i].temp)});
-					this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
-					this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
-					// The line below is really important. setTimeout is a non-blocking.
-				// }, i*1000);
-				}, i*900);
+			if(message_object.state.reported.data[0].deviceId ===  this.state.deviceID){
+				
+				for (let i = 0; i < message_object.state.reported.data.length; i++){
+					this.setState({IoT_device_data: message_object.state.reported.data[i]});
+					this.setState({current_datalist_timestamp: message_object.state.reported.data[i].data_timestamp});
+					setTimeout(()=>{
+						this.setState({deviceID: message_object.state.reported.data[0].deviceId})
+						this.setState({currentTemp: [message_object.state.reported.data[i].temp]});
+						this.setState({currentHum: [message_object.state.reported.data[i].humid]});
+						this.setState({currentPM25: [message_object.state.reported.data[i].pm25]});
+						this.setState({currentSound: [message_object.state.reported.data[i].sound]});
+						this.setState({currentVibration: [message_object.state.reported.data[i].vib]});
+						this.setState({tempDatalist: this.setDataList(this.state.tempDatalist, message_object.state.reported.data[i].temp)});
+						this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
+						this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
+						// The line below is really important. setTimeout is a non-blocking.
+					// }, i*1000);
+					}, i*900);
+				}
+				console.log(message_object);
+				
 			}
-			console.log(message_object);
 			},
       error: error => console.error(error),
       close: () => console.log('Done'),

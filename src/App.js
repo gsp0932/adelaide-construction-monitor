@@ -24,23 +24,27 @@ class App extends React.Component {
     this.state={
       add_device_open : false,
       add_device_textfield_value: "",
-      device_id_list: ['demo-01', 'demo_1', 'demo_4','demo04']
+      device_id_list: ['demo-01', 'demo_1', 'demo_2', 'demo_3','demo_4','demo_5']
     }
     
     this.handleClickAddDevice = this.handleClickAddDevice.bind(this);
     this.handleAddDeviceClose = this.handleAddDeviceClose.bind(this);
     this.handleAddDeviceAdd = this.handleAddDeviceAdd.bind(this);
-    this.setNewDeviceID = this.setNewDeviceID.bind(this);
+    this.handleTextfieldChange = this.handleTextfieldChange.bind(this);
   }
   
   handleClickAddDevice(){
     this.setState({add_device_open: true})
   }
   
-  setNewDeviceID(event){
-    const {value} = event.target;
+  // setNewDeviceID(event){
+  //   const {value} = event.target;
+  //   this.setState({add_device_textfield_value: value})
+  //   console.log(event.target);
+  // }
+  
+  handleTextfieldChange(value){
     this.setState({add_device_textfield_value: value})
-    console.log(event.target);
   }
   
   handleAddDeviceAdd(){
@@ -94,7 +98,7 @@ class App extends React.Component {
                       type="string"
                       variant="standard"
                       defaultValue={this.state.add_device_textfield_value}
-                      onChange={this.setNewDeviceID}
+                      onChange={this.handleTextfieldChange}
                     </TextField>
                   </DialogContent>
                   <DialogActions>
