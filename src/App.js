@@ -43,8 +43,8 @@ class App extends React.Component {
   //   console.log(event.target);
   // }
   
-  handleTextfieldChange(value){
-    this.setState({add_device_textfield_value: value})
+  handleTextfieldChange(event){
+    this.setState({add_device_textfield_value: event.target.value});
   }
   
   handleAddDeviceAdd(){
@@ -66,57 +66,69 @@ class App extends React.Component {
       
       <div className="App">
         {/* <header className="App-header"></header> */}
-          <Grid container spacing={2} direction="column" justifyContent="center" alignItems="center">
-            
-            <Box 
-            display="flex"
-            flexDirection={"row"}
-            justify-content="space-between"
-            alignItems="stretch"
-            gap="150px"
-            marginTop={5}>
-              <div style={{fontSize: '1.3rem', fontWeight:'bold', color: 'white', marginLeft: '20px'} }>Device</div>
-              
-              <div>
-                <Button onClick={this.handleClickAddDevice}
-                variant='contained' style={{backgroundColor: '#71797E', color: 'white'}}>
-                  Add device
-                </Button>
-                
-                <Dialog open={this.state.add_device_open} onClose={this.handleAddDeviceClose}>
-                  <DialogTitle>
-                    Add device
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText>
-                      Device ID:
-                    </DialogContentText>
-                    <TextField>
-                      autoFocus
-                      margin="dense"
-                      label="Device ID"
-                      type="string"
-                      variant="standard"
-                      defaultValue={this.state.add_device_textfield_value}
-                      onChange={this.handleTextfieldChange}
-                    </TextField>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={this.handleAddDeviceClose}> Close </Button>
-                    <Button onClick={this.handleAddDeviceAdd}> Add </Button>
-                  </DialogActions>
-                </Dialog>
-              </div>
-                
-            </Box>
-            
-              {this.state.device_id_list.map((deviceID)=>
-              <DeviceCard key={deviceID} deviceID={deviceID}/>
-              )}
-            
-            <Box height={50}></Box>
+        
+        <Grid container>
           
+          <Box direction="column" justifyContent="center" alignItems="center">
+              <Box 
+              display="flex"
+              flexDirection={"row"}
+              justify-content="space-between"
+              alignItems="stretch"
+              gap="150px"
+              marginTop={5} marginBottom={3} marginLeft={2}>
+                <div style={{fontSize: '1.3rem', fontWeight:'bold', color: 'white', marginLeft: '20px'} }>Device</div>
+                
+                <div>
+                  <Button onClick={this.handleClickAddDevice}
+                  variant='contained' style={{backgroundColor: '#71797E', color: 'white'}}>
+                    Add device
+                  </Button>
+                  
+                  <Dialog open={this.state.add_device_open} onClose={this.handleAddDeviceClose}>
+                    <DialogTitle>
+                      Add device
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText>
+                        Device ID:
+                      </DialogContentText>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        // label="Device ID"
+                        type="string"
+                        variant="standard"
+                        value={this.state.add_device_textfield_value}
+                        onChange={this.handleTextfieldChange}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={this.handleAddDeviceClose}> Close </Button>
+                      <Button onClick={this.handleAddDeviceAdd}> Add </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+                  
+              </Box>
+          </Box>
+          
+          <Grid container spacing={2} marginLeft={0.5} marginBottom={2}>
+                {this.state.device_id_list.map((deviceID)=>
+                    <Grid item key={deviceID} 
+                    >
+                      <Grid container direction="column">
+                            <DeviceCard deviceID={deviceID}/>
+                      </Grid>
+                    </Grid> 
+                    )}
           </Grid>
+          
+        </Grid>
+          
+          
+          
+        
           
         
               

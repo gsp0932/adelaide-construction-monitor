@@ -43,20 +43,21 @@ class DeviceCard extends React.Component{
 			currentVibration: [0],
       IoT_payload_object: {}, IoT_device_data: {},
 			TempExpanded: true, HumExpanded: true, PM25Expanded: true, SoundExpanded: true
-    }
+    };
 		
 		// this.handleTempExpandClick = this.handleTempExpandClick.bind(this);
 		// this.handleHumExpandClick = this.handleHumExpandClick.bind(this);
 		// this.handlePMExpandClick = this.handlePMExpandClick.bind(this);
 		// this.handleSoundExpandClick = this.handleSoundExpandClick.bind(this);
+		
+		this.handlePowerOffClick = this.handlePowerOffClick.bind(this);
 	}
 	
 	
 	componentDidMount(){
 
     // Handle MQTT payload and trigger rerendering with setstate
-		// let device_data_publish = '$aws/things/' +  'construction_esp32' + '/shadow/update/' + this.state.deviceID;
-		let device_data_publish = '$aws/things/' +  'construction_esp32' + '/shadow/update'
+		let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update" + "/"+ this.state.deviceID
 		PubSub.subscribe(device_data_publish).subscribe({
 			next: data => 
 			{
@@ -70,8 +71,8 @@ class DeviceCard extends React.Component{
 			// Has to be nested inside subscribe as an asynchronous call, otherwise, won't trigger rerendering chart.
 			// Push device data to each type of charts
 			this.setState({IoT_payload_object:message_object});
-			if(message_object.state.reported.data[0].deviceId ===  this.state.deviceID){
-				
+			// if(message_object.state.reported.data[0].deviceId ===  this.state.deviceID)						// ! REMEMBER TO REMOVE THIS
+			{
 				for (let i = 0; i < message_object.state.reported.data.length; i++){
 					this.setState({IoT_device_data: message_object.state.reported.data[i]});
 					this.setState({current_datalist_timestamp: message_object.state.reported.data[i].data_timestamp});
@@ -111,7 +112,11 @@ class DeviceCard extends React.Component{
   }
 	
 	addData(currentData, payloadAttributeData){
-		return[...currentData,  {x: new Date(), y: payloadAttributeData}]
+		return[...currentData,  {x: new Date(), y: payloadAttributeData}];
+	}
+	
+	handlePowerOffClick(){
+		PubSub.publish('aws/things/construction_esp32/command/' + this.state.deviceID, {msg: 'OFF'});
 	}
 	
 	// handleTempExpandClick(){this.setState(prevState => ({TempExpanded: !prevState.TempExpanded}));}
@@ -123,8 +128,8 @@ class DeviceCard extends React.Component{
 		return (
 			<Grid item xs={6} md={8}>
 				<Box className="DeviceCard" sx={{maxWidth: 350}}>
-				<Box style={{backgroundColor: '#172153', width: '300px', 
-				height: '45px', width: '340px',
+				<Box style={{backgroundColor: '#172153',
+				width: '340px', height: '45px',
 				display: 'flex', flexDirection: 'row', 
 				alignItems: 'center', justifyContent: 'center', gap: '95px', padding: '5px'}}>
 					<div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -201,7 +206,7 @@ class DeviceCard extends React.Component{
 					</IconButton>
 					<HistoryButton deviceID={this.state.deviceID}/>
 					<Box style={{border: "1px solid #000", borderColor:"gray", borderRadius:30, overflow: "hidden", height: 30, width: 30, display: "flex", alignItems: "center", justifyContent: "center"}}>
-					<IconButton>
+					<IconButton onClick={this.handlePowerOffClick}>
 						<PowerSettingsNewIcon/>
 					</IconButton>
 					</Box>

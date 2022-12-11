@@ -39,7 +39,7 @@ class DeviceHistory extends React.Component {
       
       // All use millisecond
       + "/" 
-      + (moment().unix()-24*60*60) // Back to 1 day
+      + (moment().unix()-14*24*60*60) // Back to 2 weeks
       + "/" 
       + moment().unix()
       
@@ -275,7 +275,7 @@ class DeviceHistory extends React.Component {
               <Box maxWidth={180}>
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                   <DateTimePicker label="From"
-                  value={moment.unix(this.state.datetime_from).format('DD-MM-YYYY HH:mm')} 
+                  value={moment.unix(this.state.datetime_from).format()}                // NOT USING CUSTOM FORMAT TO PREVENT UNCONSISTENT DISPLAY BETWEEN DEVICES
                   onChange={this.handleChangeFrom} 
                   renderInput={(params)=><TextField {...params}/>}
                   ampm={false}
@@ -286,7 +286,7 @@ class DeviceHistory extends React.Component {
               <Box maxWidth={180}>
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                   <DateTimePicker label="To" 
-                  value={moment.unix(this.state.datetime_to).format('DD-MM-YYYY HH:mm')} 
+                  value={moment.unix(this.state.datetime_to).format()} 
                   onChange={this.handleChangeTo} 
                   renderInput={(params)=><TextField {...params}/>}
                   ampm={false}
@@ -317,15 +317,6 @@ class DeviceHistory extends React.Component {
               <BrushChart  {...this.state.propsVibAndSound}/>
             </Box>
             
-            {/* <ul>
-              {this.state.history_data_items.map(e => (
-                <li key={e.sample_time}>
-                  {new Date(parseInt(JSON.stringify(e.sample_time).slice(6, -2))*1000).toLocaleString()}
-                   - 
-                  {JSON.stringify(e.data_temp).slice(6, -2)}
-                </li>
-              ))}
-            </ul> */}
           </Box>
         </Grid>
       </Grid>
@@ -333,7 +324,7 @@ class DeviceHistory extends React.Component {
   }
 }
 
-export default (props) => (
+export default (props) => (           // ? Explanation ?
   <DeviceHistory 
   {...props}
   params={useParams()}

@@ -27,7 +27,10 @@ class RealtimeLineChart extends React.Component {
 				},
 				xaxis: {
 					type: "datetime",
-					range: props.range
+					range: props.range,
+					labels: {
+						datetimeUTC: false											// ! IMPORTANT: default is true
+					}
 				},
 				yaxis: {
 					labels:{
