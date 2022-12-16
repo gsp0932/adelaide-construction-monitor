@@ -58,6 +58,7 @@ class DeviceCard extends React.Component{
 
     // Handle MQTT payload and trigger rerendering with setstate
 		let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update" + "/"+ this.state.deviceID
+		// let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update"
 		PubSub.subscribe(device_data_publish).subscribe({
 			next: data => 
 			{
@@ -71,7 +72,7 @@ class DeviceCard extends React.Component{
 			// Has to be nested inside subscribe as an asynchronous call, otherwise, won't trigger rerendering chart.
 			// Push device data to each type of charts
 			this.setState({IoT_payload_object:message_object});
-			// if(message_object.state.reported.data[0].deviceId ===  this.state.deviceID)						// ! REMEMBER TO REMOVE THIS
+			if(message_object.state.reported.data[0].deviceId ===  this.state.deviceID)						// ! REMEMBER TO REMOVE THIS
 			{
 				for (let i = 0; i < message_object.state.reported.data.length; i++){
 					this.setState({IoT_device_data: message_object.state.reported.data[i]});
