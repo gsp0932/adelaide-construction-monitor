@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -7,7 +7,7 @@ import {HashRouter} from 'react-router-dom';
 import DeviceHistory from './pages/DeviceHistory';
 import {Routes, Route} from  'react-router-dom';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLFormElement);
 root.render(
   // <React.StrictMode>
     <HashRouter>

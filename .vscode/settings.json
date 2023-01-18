@@ -1,3 +1,4 @@
 {
-	"workbench.colorTheme": "PyCharm Dark Theme"
+	"workbench.colorTheme": "PyCharm Night Theme",
+	"C_Cpp.errorSquiggles": "enabled"
 }

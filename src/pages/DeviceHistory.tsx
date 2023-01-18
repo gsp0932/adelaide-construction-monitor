@@ -1,24 +1,32 @@
-import React from 'react';
-import MixedChart from '../components/MixedChart';
+import * as React from 'react';
+// import MixedChart from '../components/MixedChart';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import BrushChart from '../components/BrushChart';
 import { BackButton } from '../components/BackButton';
 
-import moment from 'moment';
+import * as moment from 'moment';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import TextField from '@mui/material/TextField';
 import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 
-import Select from '@mui/material/Select';
-import { FormControl, InputLabel, MenuItem } from '@mui/material';
+// import Select from '@mui/material/Select';
+// import { FormControl, InputLabel, MenuItem } from '@mui/material';
 
 import {vibAndSoundBrushOption, tempHumPMBrushOption} from '../components/ChartOptions';
 
 import {useParams} from "react-router";
 
-class DeviceHistory extends React.Component {
+export interface MyProps {
+  
+}
+
+export interface MyState {
+  
+}
+
+class DeviceHistory extends React.Component <any, any>{
   constructor(props){
     super(props);
     this.state = {
@@ -102,11 +110,11 @@ class DeviceHistory extends React.Component {
   // }
   
   setAttributeSeries(history_data_items){
-    let temp_series = [];
-    let humid_series = [];
-    let pm25_series = [];
-    let vib_series = [];
-    let sound_series = [];
+    let temp_series: any = [];
+    let humid_series: any = [];
+    let pm25_series: any = [];
+    let vib_series: any = [];
+    let sound_series: any = [];
     let max_timestamp = 0;
     let min_timestamp = 0;
     history_data_items.forEach((e)=>{
@@ -324,7 +332,7 @@ class DeviceHistory extends React.Component {
   }
 }
 
-export default (props) => (           // ? Explanation ?
+export default (props) => (           // ?
   <DeviceHistory 
   {...props}
   params={useParams()}

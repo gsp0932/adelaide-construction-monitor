@@ -1,7 +1,8 @@
-import moment from "moment";
+import { ApexOptions } from "apexcharts";
+import * as moment from "moment";
 
 // ------------------ DEVICE CARD CHARTS OPTIONS ------------------
-export var tempRadialChartOption =
+export var tempRadialChartOption : ApexOptions =
 	{
 		plotOptions: {
 			radialBar: {
@@ -46,7 +47,7 @@ export var tempRadialChartOption =
 					},
 					value: {
 						formatter: function(val) {
-							return parseInt(val);
+							return val.toString();
 						},
 						offsetY:0,
 						color: '#111',
@@ -75,7 +76,7 @@ export var tempRadialChartOption =
 		labels: [String.fromCodePoint(8451)],
 }
 
-export var humRadialChartOption =
+export var humRadialChartOption : ApexOptions =
 {
 	plotOptions: {
 		radialBar: {
@@ -120,7 +121,7 @@ export var humRadialChartOption =
 				},
 				value: {
 					formatter: function(val) {
-						return parseInt(val);
+						return val.toString();
 					},
 					offsetY:0,
 					color: '#111',
@@ -149,7 +150,7 @@ export var humRadialChartOption =
 	labels: ['%'],
 }
 
-export var pmRadialChartOption =
+export var pmRadialChartOption : ApexOptions =
 {
 	plotOptions: {
 		radialBar: {
@@ -194,7 +195,7 @@ export var pmRadialChartOption =
 				},
 				value: {
 					formatter: function(val) {
-						return parseInt(val);
+						return val.toString();
 					},
 					offsetY:0,
 					color: '#111',
@@ -223,16 +224,13 @@ export var pmRadialChartOption =
 	labels: ['\xB5g/m\xB3'],
 }
 
-export var soundRadialStroke =
+export var soundRadialStroke : ApexOptions =
 {
 	grid: {
 		padding: {
 		 top: -25,
 		 bottom: 0
 		}
-	},
-	sparkline: {
-		enabled: true
 	},
 	plotOptions: {
 		radialBar: {
@@ -248,8 +246,8 @@ export var soundRadialStroke =
 					offsetY: -20,
 					fontSize: '22px',
 					color: undefined,
-					formatter: function (val) {
-						return val;
+					formatter: function(val) {
+						return val.toString();
 					}
 				}
 			}
@@ -272,16 +270,13 @@ export var soundRadialStroke =
 	labels: ['dB (SPL)'],
 }
 
-export var vibrationRadialStroke =
+export var vibrationRadialStroke : ApexOptions =
 {
 	grid: {
 		padding: {
 		 top: -25,
 		 bottom: 0
 		}
-	},
-	sparkline: {
-		enabled: true
 	},
 	plotOptions: {
 		radialBar: {
@@ -297,8 +292,8 @@ export var vibrationRadialStroke =
 					offsetY: -20,
 					fontSize: '22px',
 					color: undefined,
-					formatter: function (val) {
-						return val;
+					formatter: function(val) {
+						return val.toString();
 					}
 				}
 			}

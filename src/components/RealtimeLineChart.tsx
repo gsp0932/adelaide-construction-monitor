@@ -1,7 +1,7 @@
-import React from "react";
+import * as React from "react";
 import Chart from 'react-apexcharts';
 
-class RealtimeLineChart extends React.Component {
+class RealtimeLineChart extends React.Component <any, any>{
 	constructor(props) {
 	  super(props);
 	  this.state = {

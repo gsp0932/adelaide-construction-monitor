@@ -1,5 +1,6 @@
+// @ts-nocheck
 import './App.css';
-import React, {Component} from 'react';
+import * as React  from 'react';
 
 import {AwsIoT_connect} from './utils/connection';
 
@@ -16,12 +17,20 @@ import { DialogContent, DialogContentText, DialogTitle, TextField, DialogActions
 // Authenticate and connect with AWS MQTT broker
 AwsIoT_connect();
 
+export interface MyProps {
+};
+
+export interface MyState {
+  add_device_open: boolean
+  add_device_textfield_value: string,
+  device_id_list: Array<string>
+};
 
 // Main App - Homepage
-class App extends React.Component {
+class App extends React.Component <MyProps, MyState>{
   constructor(props){
     super(props);
-    this.state={
+    this.state = {
       add_device_open : false,
       add_device_textfield_value: "",
       device_id_list: ['demo-01', 'demo_1', 'demo_2', 'demo_3','demo_4','demo_5']
@@ -69,7 +78,7 @@ class App extends React.Component {
         
         <Grid container>
           
-          <Box direction="column" justifyContent="center" alignItems="center">
+          <Box flexDirection="column" justifyContent="center" alignItems="center">
               <Box 
               display="flex"
               flexDirection={"row"}

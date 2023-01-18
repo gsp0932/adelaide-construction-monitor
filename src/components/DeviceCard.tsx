@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { PubSub } from 'aws-amplify';
 import RealtimeLineChart from './RealtimeLineChart';
 import {tempRadialChartOption, humRadialChartOption, pmRadialChartOption, soundRadialStroke, vibrationRadialStroke} from './ChartOptions';
@@ -6,39 +6,63 @@ import ReactApexChart from "react-apexcharts";
 
 import Box from '@mui/material/Box';
 
-import { Button, Collapse, Divider, IconButton, ToggleButton } from '@mui/material';
+import { 
+	// Button, 
+	// Collapse, 
+	// ToggleButton ,
+	Divider, IconButton, 
+} from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import {styled} from '@mui/material/styles';
+// import {styled} from '@mui/material/styles';
 import {HistoryButton} from './HistoryButton';
 
 import Grid from '@mui/material/Grid';
-import {flushSync} from 'react-dom';
+// import {flushSync} from 'react-dom';
 
 // Time range real-time chart
 const TIME_RANGE_IN_MILLISECONDS = 30 * 1000;
 
-// Styling expanding button
-const ExpandMore = styled((props)=>{
-	const {expand, ...other} = props;
-	return <IconButton {...other}/>;
-})(({theme, expand})=>({
-	transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-	marginLeft: 'auto',
-	transition: theme.transitions.create('transform',{
-		duration: theme.transitions.duration.shortest,
-	})
-}));
+// // Styling expanding button
+// const ExpandMore = styled((props)=>{
+// 	const {expand, ...other} = props;
+// 	return <IconButton {...other}/>;
+// })(({theme, expand})=>({
+// 	transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+// 	marginLeft: 'auto',
+// 	transition: theme.transitions.create('transform',{
+// 		duration: theme.transitions.duration.shortest,
+// 	})
+// }));
 
+export interface MyProps {
+};
+
+export interface MyState {
+  deviceID: string,
+	currentTemp: any[], 
+	tempDatalist: any[],
+	currentHum: any[], 
+	humDatalist: any[],
+	currentPM25: any[], 
+	pmDatalist: any[],
+	currentSound: any[],
+	currentVibration: any[],
+	IoT_payload_object: {}, IoT_device_data: {},
+	TempExpanded: true, HumExpanded: true, PM25Expanded: true, SoundExpanded: true
+};
 	
-class DeviceCard extends React.Component{
+class DeviceCard extends React.Component <MyProps, MyState>{
 	constructor(props){
 		super(props);
 		this.state = {
 			deviceID: props.deviceID,
-			currentTemp: [0], tempDatalist: [{name: "Temperature", data: []}],
-			currentHum: [0], humDatalist: [{name: "Humidity", data: []}],
-			currentPM25: [0], pmDatalist: [{name: "PM2.5", data: []}],
+			currentTemp: [0], 
+			tempDatalist: [{name: "Temperature", data: []}],
+			currentHum: [0], 
+			humDatalist: [{name: "Humidity", data: []}],
+			currentPM25: [0], 
+			pmDatalist: [{name: "PM2.5", data: []}],
 			currentSound: [0],
 			currentVibration: [0],
       IoT_payload_object: {}, IoT_device_data: {},
@@ -76,7 +100,6 @@ class DeviceCard extends React.Component{
 			{
 				for (let i = 0; i < message_object.state.reported.data.length; i++){
 					this.setState({IoT_device_data: message_object.state.reported.data[i]});
-					this.setState({current_datalist_timestamp: message_object.state.reported.data[i].data_timestamp});
 					setTimeout(()=>{
 						this.setState({deviceID: message_object.state.reported.data[0].deviceId})
 						this.setState({currentTemp: [message_object.state.reported.data[i].temp]});
@@ -96,14 +119,14 @@ class DeviceCard extends React.Component{
 			}
 			},
       error: error => console.error(error),
-      close: () => console.log('Done'),
+      // close:() => console.log('Done'),			// 'close' is not declared in definition
   });
 	
 			
   }
   
   setDataList(attributeDatalist, payloadAtrributeData){
-		let newDatalist = [];
+		let newDatalist : any = [];
     attributeDatalist.forEach((e)=>{
 			let currentData = e.data;
 			currentData = this.addData(currentData, payloadAtrributeData);
