@@ -36,6 +36,7 @@ const TIME_RANGE_IN_MILLISECONDS = 30 * 1000;
 // }));
 
 export interface MyProps {
+	deviceID: any
 };
 
 export interface MyState {
@@ -53,7 +54,7 @@ export interface MyState {
 };
 	
 class DeviceCard extends React.Component <MyProps, MyState>{
-	constructor(props){
+	constructor(props: any){
 		super(props);
 		this.state = {
 			deviceID: props.deviceID,
@@ -125,17 +126,20 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 			
   }
   
-  setDataList(attributeDatalist, payloadAtrributeData){
+  setDataList(attributeDatalist: any, payloadAtrributeData: any){
 		let newDatalist : any = [];
-    attributeDatalist.forEach((e)=>{
+    attributeDatalist.forEach((e: any)=>{
 			let currentData = e.data;
 			currentData = this.addData(currentData, payloadAtrributeData);
-			newDatalist.push({name: e.name, data: currentData})
+			// if(newDatalist.length > 10){
+			// 	newDatalist.shift();
+			// }
+			newDatalist.push({name: e.name, data: currentData});
     })
 		return newDatalist;
   }
 	
-	addData(currentData, payloadAttributeData){
+	addData(currentData: any, payloadAttributeData: any){
 		return[...currentData,  {x: new Date(), y: payloadAttributeData}];
 	}
 	

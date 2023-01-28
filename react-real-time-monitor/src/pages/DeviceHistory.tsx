@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import BrushChart from '../components/BrushChart';
 import { BackButton } from '../components/BackButton';
 
-import * as moment from 'moment';
+import moment from 'moment';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import TextField from '@mui/material/TextField';
 import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
@@ -27,7 +27,7 @@ export interface MyState {
 }
 
 class DeviceHistory extends React.Component <any, any>{
-  constructor(props){
+  constructor(props: any){
     super(props);
     this.state = {
       datetime_from: moment().unix(),
@@ -98,18 +98,18 @@ class DeviceHistory extends React.Component <any, any>{
   }
   
   
-  handleChangeFrom(new_datetime_from){
+  handleChangeFrom(new_datetime_from: any){
     this.setState({datetime_from: new_datetime_from});
   }
   
-  handleChangeTo(new_datetime_to){
+  handleChangeTo(new_datetime_to: any){
     this.setState({datetime_to: new_datetime_to});
   }
   // handleChangeDisplayBy(event){
   //   this.setState({display_by: event.target.value})
   // }
   
-  setAttributeSeries(history_data_items){
+  setAttributeSeries(history_data_items: any){
     let temp_series: any = [];
     let humid_series: any = [];
     let pm25_series: any = [];
@@ -117,7 +117,7 @@ class DeviceHistory extends React.Component <any, any>{
     let sound_series: any = [];
     let max_timestamp = 0;
     let min_timestamp = 0;
-    history_data_items.forEach((e)=>{
+    history_data_items.forEach((e: any)=>{
       let timestamp = new Date(parseInt(JSON.stringify(e.sample_time).slice(6, -2))*1000).getTime();
       
       if (timestamp > max_timestamp){
@@ -332,7 +332,7 @@ class DeviceHistory extends React.Component <any, any>{
   }
 }
 
-export default (props) => (           // ?
+export default (props: any) => (           // ?
   <DeviceHistory 
   {...props}
   params={useParams()}

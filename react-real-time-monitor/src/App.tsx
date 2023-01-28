@@ -1,4 +1,3 @@
-// @ts-nocheck
 import './App.css';
 import * as React  from 'react';
 
@@ -28,12 +27,12 @@ export interface MyState {
 
 // Main App - Homepage
 class App extends React.Component <MyProps, MyState>{
-  constructor(props){
+  constructor(props: any){
     super(props);
     this.state = {
       add_device_open : false,
       add_device_textfield_value: "",
-      device_id_list: ['demo-01', 'demo_1', 'demo_2', 'demo_3']
+      device_id_list: ['demo_1', 'demo_2', 'demo_3', 'demo_4', 'demo-01']
     }
     
     this.handleClickAddDevice = this.handleClickAddDevice.bind(this);
@@ -52,7 +51,7 @@ class App extends React.Component <MyProps, MyState>{
   //   console.log(event.target);
   // }
   
-  handleTextfieldChange(event){
+  handleTextfieldChange(event: any){
     this.setState({add_device_textfield_value: event.target.value});
   }
   
@@ -105,7 +104,6 @@ class App extends React.Component <MyProps, MyState>{
                       <TextField
                         autoFocus
                         margin="dense"
-                        // label="Device ID"
                         type="string"
                         variant="standard"
                         value={this.state.add_device_textfield_value}
@@ -134,12 +132,6 @@ class App extends React.Component <MyProps, MyState>{
           </Grid>
           
         </Grid>
-          
-          
-          
-        
-          
-        
               
       </div>
     ); 

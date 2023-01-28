@@ -2,7 +2,7 @@ import * as React from "react";
 import Chart from 'react-apexcharts';
 
 class RealtimeLineChart extends React.Component <any, any>{
-	constructor(props) {
+	constructor(props: any) {
 	  super(props);
 	  this.state = {
 			options: {
@@ -34,7 +34,7 @@ class RealtimeLineChart extends React.Component <any, any>{
 				},
 				yaxis: {
 					labels:{
-						formatter: val => val.toFixed(0)
+						formatter: (val: any) => val.toFixed(0)
 					},
 				}
 			}

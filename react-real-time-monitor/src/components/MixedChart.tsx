@@ -2,7 +2,7 @@ import * as React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 class MixedChart extends React.Component <any, any> {
-        constructor(props) {
+        constructor(props: any) {
           super(props);
 
           this.state = {

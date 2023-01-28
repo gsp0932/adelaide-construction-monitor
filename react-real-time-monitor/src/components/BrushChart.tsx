@@ -28,7 +28,7 @@ import ReactApexChart from 'react-apexcharts';
 
 
 class BrushChart extends React.Component<any, any> {
-	constructor(props) {
+	constructor(props: any) {
 		super(props);
 
 		this.state = {};

@@ -1,5 +1,5 @@
 import { ApexOptions } from "apexcharts";
-import * as moment from "moment";
+import moment from "moment";
 
 // ------------------ DEVICE CARD CHARTS OPTIONS ------------------
 export var tempRadialChartOption : ApexOptions =

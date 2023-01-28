@@ -1,4 +1,4 @@
-// import * as React from "react";
+import * as React from "react";
 
 // export interface Esp32{
 // 	connect: () => void,
@@ -25,7 +25,7 @@
 // 			"123"
 // 			);
 			
-// 		const togglecChar = await service?.getCharacteristic(
+// 		const toggleChar = await service?.getCharacteristic(
 // 			"123"
 // 		);
 		

@@ -13,6 +13,7 @@ const config = {
   output: {
     filename: './bundle.js',
     path: path.resolve(__dirname, "dist"),
+    clean: true
   },
   devServer: {
     open: true,
@@ -54,7 +55,6 @@ const config = {
   },
   externals: {
     "react": "React",
-    
   },
   devtool: "source-map"
 };
