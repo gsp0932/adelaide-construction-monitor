@@ -82,8 +82,8 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 	componentDidMount(){
 
     // Handle MQTT payload and trigger rerendering with setstate
-		// let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update" + "/"+ this.state.deviceID
-		let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update"
+		let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update" + "/"+ this.state.deviceID
+		// let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update"
 		PubSub.subscribe(device_data_publish).subscribe({
 			next: data => 
 			{
@@ -115,8 +115,6 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 					// }, i*1000);
 					}, i*900);
 				}
-				console.log(message_object);
-				
 			}
 			},
       error: error => console.error(error),

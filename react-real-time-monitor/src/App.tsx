@@ -32,7 +32,7 @@ class App extends React.Component <MyProps, MyState>{
     this.state = {
       add_device_open : false,
       add_device_textfield_value: "",
-      device_id_list: ['demo_1', 'demo_2', 'demo_3', 'demo_4', 'demo-01']
+      device_id_list: ['demo_1', 'demo_2', 'demo_3', 'demo_4', 'demo_5', 'demo-01']
     }
     
     this.handleClickAddDevice = this.handleClickAddDevice.bind(this);
@@ -62,7 +62,6 @@ class App extends React.Component <MyProps, MyState>{
       device_id_list: newList,
       add_device_open: false
     })
-    console.log(this.state.add_device_textfield_value);
   }
   
   handleAddDeviceClose(){

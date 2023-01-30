@@ -18,13 +18,11 @@ import {vibAndSoundBrushOption, tempHumPMBrushOption} from '../components/ChartO
 
 import {useParams} from "react-router";
 
-export interface MyProps {
-  
-}
+// export interface MyProps {
+// }
 
-export interface MyState {
-  
-}
+// export interface MyState {
+// }
 
 class DeviceHistory extends React.Component <any, any>{
   constructor(props: any){
@@ -249,8 +247,10 @@ class DeviceHistory extends React.Component <any, any>{
   }
   
   componentDidMount(){
+    console.log(moment().unix()-14*24*60*60);
+    console.log(moment().unix())
     
-    fetch(this.state.dynamo_history_api_request)
+    fetch(this.state.dynamo_history_api_request, {headers: {'Content-Type': 'application/json'}})
     .then(response => response.json())
     .then(
       (result) => {
