@@ -1,39 +1,12 @@
 import * as React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-// function generateDayWiseTimeSeries(baseval, count, yrange) {
-//   var i = 0;
-//   let series: any = [];
-//   while (i < count) {
-//     var x = baseval;
-//     var y =
-//       Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-
-//     series.push([x, y]);
-//     baseval += 86400000;
-//     i++;
-//   }
-//   return series;
-// };
-
-// var acoustic_data = generateDayWiseTimeSeries(new Date("22 Apr 2017").getTime(), 115, {
-//   min: 30,
-//   max: 90
-// });
-
-// var vibration_data = generateDayWiseTimeSeries(new Date("22 Apr 2017").getTime(), 115, {
-//   min: 30,
-//   max: 90
-// });
-
-
 class BrushChart extends React.Component<any, any> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {};
 	}
-
 
 	render() {
 		return (

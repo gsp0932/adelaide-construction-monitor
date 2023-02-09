@@ -13,7 +13,7 @@ root.render(
     <HashRouter>
       <Routes>
         <Route path="/" element={<App/>}/>
-        <Route path="/DeviceHistory/:deviceid" element={<DeviceHistory/>}/>
+        <Route path="/DeviceHistory/:deviceID" element={<DeviceHistory/>}/>
       </Routes>
     </HashRouter>
   // </React.StrictMode>

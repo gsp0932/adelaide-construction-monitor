@@ -1,13 +1,12 @@
 import './App.css';
 import * as React  from 'react';
 
-import {AwsIoT_connect} from './utils/connection';
+import {AwsIoT_connect} from './utils/Connection';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
 import DeviceCard from './components/DeviceCard';
-
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -45,12 +44,6 @@ class App extends React.Component <MyProps, MyState>{
     this.setState({add_device_open: true})
   }
   
-  // setNewDeviceID(event){
-  //   const {value} = event.target;
-  //   this.setState({add_device_textfield_value: value})
-  //   console.log(event.target);
-  // }
-  
   handleTextfieldChange(event: any){
     this.setState({add_device_textfield_value: event.target.value});
   }
@@ -72,7 +65,6 @@ class App extends React.Component <MyProps, MyState>{
     return (
       
       <div className="App">
-        {/* <header className="App-header"></header> */}
         
         <Grid container>
           

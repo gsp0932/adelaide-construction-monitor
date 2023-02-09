@@ -11,49 +11,38 @@ import TextField from '@mui/material/TextField';
 import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 
-// import Select from '@mui/material/Select';
-// import { FormControl, InputLabel, MenuItem } from '@mui/material';
-
 import {vibAndSoundBrushOption, tempHumPMBrushOption} from '../components/ChartOptions';
 
-import {useParams} from "react-router";
-
-// export interface MyProps {
-// }
-
-// export interface MyState {
-// }
+import {useParams} from "react-router";     // for passing argument deviceID
 
 class DeviceHistory extends React.Component <any, any>{
   constructor(props: any){
     super(props);
     this.state = {
-      datetime_from: moment().unix(),
+      datetime_from: moment().unix()-7*24*60*60,
       datetime_to: moment().unix(),
       display_by: "Date-time",
       
-      deviceid: this.props.params.deviceid,     // get deviceid from url
+      deviceID: this.props.params.deviceID,     // get deviceID from device card
       
       dynamo_history_api_request: 
       "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/"
       +
-      this.props.params.deviceid
+      this.props.params.deviceID
       // + "/" 
-      // + "1670220412"
+      // + "1675697737"
       // + "/" 
-      // + "1670221447"
+      // + "1675697752"
       
-      // All use millisecond
+      // moment().unix() is in seconds, while apexcharts use milliseconds
       + "/" 
-      + (moment().unix()-14*24*60*60) // Back to 2 weeks
+      + (moment().unix()-7*24*60*60)           // Latest 1 week data
       + "/" 
-      + moment().unix()
+      + (moment().unix())
       
       ,
       error: null,
       isLoaded: false,
-      
-      testCounter: 0,
       
       propsTempHumPM: {
         series: [{
@@ -94,48 +83,65 @@ class DeviceHistory extends React.Component <any, any>{
     this.handleChangeFrom = this.handleChangeFrom.bind(this);
     this.handleChangeTo = this.handleChangeTo.bind(this);
   }
-  
-  
+
+  // Handle datetime changes
   handleChangeFrom(new_datetime_from: any){
     this.setState({datetime_from: new_datetime_from});
   }
-  
   handleChangeTo(new_datetime_to: any){
     this.setState({datetime_to: new_datetime_to});
   }
-  // handleChangeDisplayBy(event){
-  //   this.setState({display_by: event.target.value})
-  // }
   
-  setAttributeSeries(history_data_items: any){
+  setAttributesSeries(history_data_items: any){
     let temp_series: any = [];
     let humid_series: any = [];
     let pm25_series: any = [];
     let vib_series: any = [];
     let sound_series: any = [];
-    let max_timestamp = 0;
-    let min_timestamp = 0;
-    history_data_items.forEach((e: any)=>{
-      let timestamp = new Date(parseInt(JSON.stringify(e.sample_time).slice(6, -2))*1000).getTime();
-      
-      if (timestamp > max_timestamp){
-        max_timestamp = timestamp;
-      }
-      if (min_timestamp === 0 || timestamp < min_timestamp){
-        min_timestamp = timestamp;
-      }
-      
-      temp_series.push([timestamp, parseInt(JSON.stringify(e.data_temp).slice(6,-2))]);
-      humid_series.push([timestamp, parseInt(JSON.stringify(e.data_humid).slice(6,-2))]);
-      pm25_series.push([timestamp, parseInt(JSON.stringify(e.data_pm25).slice(6,-2))]);
-      vib_series.push([timestamp, parseInt(JSON.stringify(e.data_vib).slice(6,-2))]);
-      sound_series.push([timestamp, parseInt(JSON.stringify(e.data_vib).slice(6,-2))]);
+    
+    let max_timestamp = 0;    // For identifying last datetime in query result
+    let min_timestamp = 0;    // For identifying first datetime in query result
+    
+    if(history_data_items.length > 0){
+      history_data_items.forEach((e: any)=>{
+        let timestamp = new Date(parseInt(JSON.stringify(e.sample_time).slice(6, -2))*1000).getTime();
+        
+        // Identify the min and max timestamps from the query result
+        if (timestamp > max_timestamp){
+          max_timestamp = timestamp;
+        }
+        if (min_timestamp === 0 || timestamp < min_timestamp){
+          min_timestamp = timestamp;
+        }
+        
+        temp_series.push([timestamp, parseInt(JSON.stringify(e.data_temp).slice(6,-2))]);
+        humid_series.push([timestamp, parseInt(JSON.stringify(e.data_humid).slice(6,-2))]);
+        pm25_series.push([timestamp, parseInt(JSON.stringify(e.data_pm25).slice(6,-2))]);
+        vib_series.push([timestamp, parseInt(JSON.stringify(e.data_vib).slice(6,-2))]);
+        sound_series.push([timestamp, parseInt(JSON.stringify(e.data_vib).slice(6,-2))]);
       });
+    }
+    
+    // Fill lower bound
+    if(min_timestamp > this.state.datetime_from || history_data_items.length === 0){
+      temp_series.unshift([this.state.datetime_from*1000, 0]);
+      humid_series.unshift([this.state.datetime_from*1000, 0]);
+      pm25_series.unshift([this.state.datetime_from*1000, 0]);
+      vib_series.unshift([this.state.datetime_from*1000, 0]);
+      sound_series.unshift([this.state.datetime_from*1000, 0]);
+    }
+    
+    // Fill upper bound
+    if(max_timestamp < this.state.datetime_to || history_data_items.length === 0){
+      temp_series.push([this.state.datetime_to*1000, 0]);
+      humid_series.push([this.state.datetime_to*1000, 0]);
+      pm25_series.push([this.state.datetime_to*1000, 0]);
+      vib_series.push([this.state.datetime_to*1000, 0]);
+      sound_series.push([this.state.datetime_to*1000, 0]);
+    }
     
     
     this.setState({
-      datetime_from: min_timestamp/1000,
-      datetime_to: max_timestamp/1000,
       propsTempHumPM: {
         series: [{
           name: 'Temperature (C)',
@@ -247,23 +253,61 @@ class DeviceHistory extends React.Component <any, any>{
   }
   
   componentDidMount(){
-    console.log(moment().unix()-14*24*60*60);
-    console.log(moment().unix())
-    
-    fetch(this.state.dynamo_history_api_request, {headers: {'Content-Type': 'application/json'}})
-    .then(response => response.json())
-    .then(
-      (result) => {
-        this.setAttributeSeries(result.Items);
-      },
-      (error) => {
-        this.setState({
-          isLoaded: true,
-          error
-        });
-        console.log(error);
-      }
+    // Break long-duration query to multiple queries and then merge as Lambda limits payload size
+    if((this.state.datetime_to - this.state.datetime_from) > (60*60*24) ){
+      let merged_history_data_items: any = [];
+      let e = this.state.datetime_from;
+      
+      while(e <= this.state.datetime_to - (this.state.datetime_to - this.state.datetime_from) % (60*60*24))
+      {
+        
+        let uri = "https://8tuqawfgv0.execute-api.us-west-1.amazonaws.com/history/"
+        + this.state.deviceID
+        + "/" 
+        + e
+        + "/" 
+        + (e + 60*60*24);
+        
+        fetch(uri)
+        .then(response => response.json())
+        .then(
+          (result) => {
+            result.Items.forEach((e: any)=>{
+              merged_history_data_items.push(e);
+            })
+            this.setAttributesSeries(merged_history_data_items);       // ! Position
+            console.log(merged_history_data_items.length);          // ! Debug
+          },
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+            console.log(error);
+          }
+        );
+        
+        e = e + 60*60*24;
+      };
+      
+      
+    } else {
+      fetch(this.state.dynamo_history_api_request)
+      .then(response => response.json())
+      .then(
+        (result) => {
+          this.setAttributesSeries(result.Items);
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+          console.log(error);
+        }
       );
+    }
+    
   }
   
   render(){
@@ -274,7 +318,7 @@ class DeviceHistory extends React.Component <any, any>{
             <Box display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center" width="400px" margin="10px">
               <BackButton/>
               <div style={{fontSize: '22px', fontWeight:'bold', color: 'black', padding: '15px', marginLeft: '5px'} }>
-                {this.state.deviceid}
+                {this.state.deviceID}
               </div>
               <div style={{fontSize: '17px', color: 'black', padding: '15px'} }>Building 21</div>
             </Box >
@@ -301,22 +345,8 @@ class DeviceHistory extends React.Component <any, any>{
                   />
                 </LocalizationProvider>              
               </Box>
-              {/* <FormControl fullWidth>
-                <InputLabel>Display by</InputLabel>
-                <Select
-                  value={this.state.display_by}
-                  label="Display by"
-                  onChange={this.handleChangeDisplayBy}
-                >
-                  <MenuItem value={"Year"}>Year</MenuItem>
-                  <MenuItem value={"Month"}>Month</MenuItem>
-                  <MenuItem value={"Date"}>Date</MenuItem>
-                  <MenuItem value={"Date-time"}>Date-time</MenuItem>
-                </Select>
-              </FormControl> */}
+
             </Box>
-            
-            {/* <MixedChart/> */}
             
             <Box>
               <BrushChart  {...this.state.propsTempHumPM}/>
@@ -332,7 +362,7 @@ class DeviceHistory extends React.Component <any, any>{
   }
 }
 
-export default (props: any) => (           // ?
+export default (props: any) => (           // !
   <DeviceHistory 
   {...props}
   params={useParams()}

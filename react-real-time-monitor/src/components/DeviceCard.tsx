@@ -23,18 +23,6 @@ import Grid from '@mui/material/Grid';
 // Time range real-time chart
 const TIME_RANGE_IN_MILLISECONDS = 30 * 1000;
 
-// // Styling expanding button
-// const ExpandMore = styled((props)=>{
-// 	const {expand, ...other} = props;
-// 	return <IconButton {...other}/>;
-// })(({theme, expand})=>({
-// 	transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-// 	marginLeft: 'auto',
-// 	transition: theme.transitions.create('transform',{
-// 		duration: theme.transitions.duration.shortest,
-// 	})
-// }));
-
 export interface MyProps {
 	deviceID: any
 };
@@ -50,7 +38,6 @@ export interface MyState {
 	currentSound: any[],
 	currentVibration: any[],
 	IoT_payload_object: {}, IoT_device_data: {},
-	TempExpanded: true, HumExpanded: true, PM25Expanded: true, SoundExpanded: true
 };
 	
 class DeviceCard extends React.Component <MyProps, MyState>{
@@ -67,23 +54,17 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 			currentSound: [0],
 			currentVibration: [0],
       IoT_payload_object: {}, IoT_device_data: {},
-			TempExpanded: true, HumExpanded: true, PM25Expanded: true, SoundExpanded: true
     };
 		
-		// this.handleTempExpandClick = this.handleTempExpandClick.bind(this);
-		// this.handleHumExpandClick = this.handleHumExpandClick.bind(this);
-		// this.handlePMExpandClick = this.handlePMExpandClick.bind(this);
-		// this.handleSoundExpandClick = this.handleSoundExpandClick.bind(this);
-		
 		this.handlePowerOffClick = this.handlePowerOffClick.bind(this);
+		
 	}
 	
 	
 	componentDidMount(){
 
     // Handle MQTT payload and trigger rerendering with setstate
-		let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update" + "/"+ this.state.deviceID
-		// let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update"
+		let device_data_publish = "aws/things/" +  "construction_esp32" + "/shadow/update"
 		PubSub.subscribe(device_data_publish).subscribe({
 			next: data => 
 			{
@@ -111,7 +92,7 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 						this.setState({tempDatalist: this.setDataList(this.state.tempDatalist, message_object.state.reported.data[i].temp)});
 						this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
 						this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
-						// The line below is really important. setTimeout is a non-blocking.
+						// ! setTimeout is a non-blocking.
 					// }, i*1000);
 					}, i*900);
 				}
@@ -129,9 +110,9 @@ class DeviceCard extends React.Component <MyProps, MyState>{
     attributeDatalist.forEach((e: any)=>{
 			let currentData = e.data;
 			currentData = this.addData(currentData, payloadAtrributeData);
-			// if(newDatalist.length > 10){
-			// 	newDatalist.shift();
-			// }
+			if(newDatalist.length > 10){
+				newDatalist.shift();
+			}
 			newDatalist.push({name: e.name, data: currentData});
     })
 		return newDatalist;
@@ -144,11 +125,6 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 	handlePowerOffClick(){
 		PubSub.publish('aws/things/construction_esp32/command/' + this.state.deviceID, {msg: 'OFF'});
 	}
-	
-	// handleTempExpandClick(){this.setState(prevState => ({TempExpanded: !prevState.TempExpanded}));}
-	// handleHumExpandClick(){this.setState(prevState => ({HumExpanded: !prevState.HumExpanded}));}
-	// handlePMExpandClick(){this.setState(prevState => ({PM25Expanded: !prevState.PM25Expanded}));}
-	// handleSoundExpandClick(){this.setState(prevState => ({SoundExpanded: !prevState.SoundExpanded}));}
 	
 	render () {
 		return (
@@ -230,7 +206,9 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 					<IconButton>
 						<SettingsIcon/>
 					</IconButton>
+					
 					<HistoryButton deviceID={this.state.deviceID}/>
+					
 					<Box style={{border: "1px solid #000", borderColor:"gray", borderRadius:30, overflow: "hidden", height: 30, width: 30, display: "flex", alignItems: "center", justifyContent: "center"}}>
 					<IconButton onClick={this.handlePowerOffClick}>
 						<PowerSettingsNewIcon/>
