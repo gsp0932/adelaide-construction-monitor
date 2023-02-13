@@ -5,7 +5,7 @@
 }
 
 .LineChart{
-  height: 10vh; /* Magic here */
+  height: 10vh; /* ! */
   display: flex;
   justify-content: center;
   align-items: center;

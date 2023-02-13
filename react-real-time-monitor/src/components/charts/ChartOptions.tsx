@@ -224,6 +224,87 @@ export var pmRadialChartOption : ApexOptions =
 	labels: ['\xB5g/m\xB3'],
 }
 
+export var multiPMsCustomAngleRadialChartOption : ApexOptions =
+{
+	grid: {
+		padding: {
+		 top: -10,
+		 bottom: 0
+		}
+	},
+	chart: {
+		height: 350,
+		type: 'radialBar',
+		},
+		plotOptions: {
+		radialBar: {
+			dataLabels: {
+			name: {
+				offsetY: -9,
+				fontSize: '20px',
+			},
+			value: {
+				offsetY: 0,
+				fontSize: '15px',
+			},
+			
+			total: {
+				show: true,
+				label: '\xB5g/m\xB3',
+				fontSize: '11px',
+				formatter: function (w) {
+				// By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+				return w.config.series[0] + '/' + w.config.series[1] + '/' + w.config.series[2]
+				}
+			}
+			}
+		}
+		},
+		labels: ['PM1', 'PM2.5', 'PM10'],
+	
+}
+
+export var multiVibrationCustomAngleRadialChartOption : ApexOptions =
+{
+	grid: {
+		padding: {
+		 top: -10,
+		 bottom: 0
+		}
+	},
+	chart: {
+		height: 350,
+		type: 'radialBar',
+		},
+		plotOptions: {
+		radialBar: {
+			dataLabels: {
+			name: {
+				offsetY: -9,
+				fontSize: '20px',
+			},
+			value: {
+				offsetY: 0,
+				fontSize: '15px',
+			},
+			
+			total: {
+				show: true,
+				label: 'g',
+				fontSize: '12px',
+				formatter: function (w) {
+				// By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+				return w.config.series[0] + '/' + w.config.series[1]
+				}
+			}
+			}
+		}
+		},
+		labels: ['Horizontal', 'Vertical'],
+	
+}
+
+
 export var soundRadialStroke : ApexOptions =
 {
 	grid: {

@@ -2,8 +2,8 @@ import * as React from 'react';
 // import MixedChart from '../components/MixedChart';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import BrushChart from '../components/BrushChart';
-import { BackButton } from '../components/BackButton';
+import BrushChart from '../components/charts/BrushChart';
+import { BackButton } from '../components/buttons/BackButton';
 
 import moment from 'moment';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 
-import {vibAndSoundBrushOption, tempHumPMBrushOption} from '../components/ChartOptions';
+import {vibAndSoundBrushOption, tempHumPMBrushOption} from '../components/charts/ChartOptions';
 
 import {useParams} from "react-router";     // for passing argument deviceID
 
@@ -276,7 +276,7 @@ class DeviceHistory extends React.Component <any, any>{
               merged_history_data_items.push(e);
             })
             this.setAttributesSeries(merged_history_data_items);       // ! Position
-            console.log(merged_history_data_items.length);          // ! Debug
+            console.log(merged_history_data_items.length);            // ! Debug
           },
           (error) => {
             this.setState({
