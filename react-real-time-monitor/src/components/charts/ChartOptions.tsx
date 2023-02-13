@@ -10,33 +10,18 @@ export var tempRadialChartOption : ApexOptions =
 				endAngle: 360,
 					hollow: {
 					margin: 0,
-					size: '70%',
+					size: '80%',
 					background: '#fff',
 					image: undefined,
 					imageOffsetX: 0,
 					imageOffsetY: 0,
 					position: 'front',
-					dropShadow: {
-						enabled: true,
-						top: 3,
-						left: 0,
-						blur: 4,
-						opacity: 0.24
-					}
 				},
 				track: {
-					background: '#fff',
-					strokeWidth: '67%',
+					background: '#f2f2f2',
+					strokeWidth: '150%',
 					margin: 0, // margin is in pixels
-					dropShadow: {
-						enabled: true,
-						top: -3,
-						left: 0,
-						blur: 4,
-						opacity: 0.35
-					}
 				},
-		
 				dataLabels: {
 					show: true,
 					name: {
@@ -51,7 +36,7 @@ export var tempRadialChartOption : ApexOptions =
 						},
 						offsetY:0,
 						color: '#111',
-						fontSize: '25px',
+						fontSize: '20px',
 						show: true,
 					}
 				}
@@ -70,9 +55,7 @@ export var tempRadialChartOption : ApexOptions =
 				stops: [0, 100]
 			}
 		},
-		stroke: {
-			lineCap: 'round'
-		},
+
 		labels: [String.fromCodePoint(8451)],
 }
 
@@ -84,31 +67,17 @@ export var humRadialChartOption : ApexOptions =
 			endAngle: 360,
 				hollow: {
 				margin: 0,
-				size: '70%',
+				size: '80%',
 				background: '#fff',
 				image: undefined,
 				imageOffsetX: 0,
 				imageOffsetY: 0,
 				position: 'front',
-				dropShadow: {
-					enabled: true,
-					top: 3,
-					left: 0,
-					blur: 4,
-					opacity: 0.24
-				}
 			},
 			track: {
-				background: '#fff',
-				strokeWidth: '67%',
+				background: '#f2f2f2',
+				strokeWidth: '150%',
 				margin: 0, // margin is in pixels
-				dropShadow: {
-					enabled: true,
-					top: -3,
-					left: 0,
-					blur: 4,
-					opacity: 0.35
-				}
 			},
 	
 			dataLabels: {
@@ -125,7 +94,7 @@ export var humRadialChartOption : ApexOptions =
 					},
 					offsetY:0,
 					color: '#111',
-					fontSize: '25px',
+					fontSize: '20px',
 					show: true,
 				}
 			}
@@ -144,13 +113,11 @@ export var humRadialChartOption : ApexOptions =
 			stops: [0, 100]
 		}
 	},
-	stroke: {
-		lineCap: 'round'
-	},
+
 	labels: ['%'],
 }
 
-export var pmRadialChartOption : ApexOptions =
+export var soundRadialChartOption : ApexOptions =
 {
 	plotOptions: {
 		radialBar: {
@@ -158,31 +125,17 @@ export var pmRadialChartOption : ApexOptions =
 			endAngle: 360,
 				hollow: {
 				margin: 0,
-				size: '70%',
+				size: '80%',
 				background: '#fff',
 				image: undefined,
 				imageOffsetX: 0,
 				imageOffsetY: 0,
 				position: 'front',
-				dropShadow: {
-					enabled: true,
-					top: 3,
-					left: 0,
-					blur: 4,
-					opacity: 0.24
-				}
 			},
 			track: {
-				background: '#fff',
-				strokeWidth: '67%',
+				background: '#f2f2f2',
+				strokeWidth: '150%',
 				margin: 0, // margin is in pixels
-				dropShadow: {
-					enabled: true,
-					top: -3,
-					left: 0,
-					blur: 4,
-					opacity: 0.35
-				}
 			},
 	
 			dataLabels: {
@@ -199,7 +152,7 @@ export var pmRadialChartOption : ApexOptions =
 					},
 					offsetY:0,
 					color: '#111',
-					fontSize: '25px',
+					fontSize: '20px',
 					show: true,
 				}
 			}
@@ -218,10 +171,8 @@ export var pmRadialChartOption : ApexOptions =
 			stops: [0, 100]
 		}
 	},
-	stroke: {
-		lineCap: 'round'
-	},
-	labels: ['\xB5g/m\xB3'],
+
+	labels: ['dB(SPL)'],
 }
 
 export var multiPMsCustomAngleRadialChartOption : ApexOptions =
@@ -238,6 +189,12 @@ export var multiPMsCustomAngleRadialChartOption : ApexOptions =
 		},
 		plotOptions: {
 		radialBar: {
+			track:{
+				strokeWidth: '130',
+				margin: 0,
+				
+			},
+			
 			dataLabels: {
 			name: {
 				offsetY: -9,
@@ -248,19 +205,34 @@ export var multiPMsCustomAngleRadialChartOption : ApexOptions =
 				fontSize: '15px',
 			},
 			
+			
 			total: {
 				show: true,
 				label: '\xB5g/m\xB3',
 				fontSize: '11px',
 				formatter: function (w) {
 				// By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-				return w.config.series[0] + '/' + w.config.series[1] + '/' + w.config.series[2]
+				return w.config.series[0] + ' / ' + w.config.series[1] + ' / ' + w.config.series[2]
 				}
 			}
 			}
 		}
 		},
 		labels: ['PM1', 'PM2.5', 'PM10'],
+		
+		fill: {
+			type: 'gradient',
+			gradient: {
+				shade: 'light',
+				type: 'horizontal',
+				shadeIntensity: 0.5,
+				gradientToColors: ['#ff5e62'],
+				inverseColors: false,
+				opacityFrom: 1,
+				opacityTo: 1,
+				stops: [0, 100]
+			}
+		},
 	
 }
 
@@ -277,29 +249,33 @@ export var multiVibrationCustomAngleRadialChartOption : ApexOptions =
 		type: 'radialBar',
 		},
 		plotOptions: {
-		radialBar: {
-			dataLabels: {
-			name: {
-				offsetY: -9,
-				fontSize: '20px',
-			},
-			value: {
-				offsetY: 0,
-				fontSize: '15px',
-			},
-			
-			total: {
-				show: true,
-				label: 'g',
-				fontSize: '12px',
-				formatter: function (w) {
-				// By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-				return w.config.series[0] + '/' + w.config.series[1]
+			radialBar: {
+				track:{
+					strokeWidth: '120',
+					margin: 0
+				},
+				dataLabels: {
+				name: {
+					offsetY: -9,
+					fontSize: '20px',
+				},
+				value: {
+					offsetY: 0,
+					fontSize: '15px',
+				},
+				total: {
+					show: true,
+					label: 'g',
+					fontSize: '12px',
+					formatter: function (w) {
+					// By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+					return w.config.series[0] + ' / ' + w.config.series[1]
+					}
 				}
-			}
-			}
-		}
+				}
+			},
 		},
+
 		labels: ['Horizontal', 'Vertical'],
 	
 }

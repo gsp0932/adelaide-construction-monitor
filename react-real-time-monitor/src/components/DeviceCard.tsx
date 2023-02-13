@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PubSub } from 'aws-amplify';
 import RealtimeLineChart from './charts/RealtimeLineChart';
-import {tempRadialChartOption, humRadialChartOption, multiPMsCustomAngleRadialChartOption, soundRadialStroke, vibrationRadialStroke, multiVibrationCustomAngleRadialChartOption} from './charts/ChartOptions';
+import {tempRadialChartOption, humRadialChartOption, soundRadialChartOption, multiPMsCustomAngleRadialChartOption, multiVibrationCustomAngleRadialChartOption} from './charts/ChartOptions';
 import ReactApexChart from "react-apexcharts";
 
 import Box from '@mui/material/Box';
@@ -29,16 +29,19 @@ export interface MyProps {
 
 export interface MyState {
   deviceID: string,
-	currentTemp: any[], 
+	latestTemp: any[], 
 	tempDatalist: any[],
-	currentHum: any[], 
+	latestHum: any[], 
 	humDatalist: any[],
-	currentPM1: any[], 
-	currentPM10: any[], 
-	currentPM25: any[], 
-	pmDatalist: any[],
-	currentSound: any[],
-	currentVibration: any[],
+	latestPM1: any[], 
+	pm1Datalist: any[],
+	latestPM25: any[], 
+	pm25Datalist: any[],
+	latestPM10: any[], 
+	pm10Datalist: any[],
+	latestSound: any[],
+	soundDatalist: any[],
+	latestVibration: any[],
 	IoT_payload_object: {}, IoT_device_data: {},
 };
 	
@@ -47,16 +50,19 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 		super(props);
 		this.state = {
 			deviceID: props.deviceID,
-			currentTemp: [0], 
+			latestTemp: [0], 
 			tempDatalist: [{name: "Temperature", data: []}],
-			currentHum: [0], 
+			latestHum: [0], 
 			humDatalist: [{name: "Humidity", data: []}],
-			currentPM1: [0], 
-			currentPM10: [0], 
-			currentPM25: [0], 
-			pmDatalist: [{name: "PM2.5", data: []}],
-			currentSound: [0],
-			currentVibration: [0],
+			latestPM1: [0], 
+			pm1Datalist: [{name: "PM1", data: []}],
+			latestPM10: [0],
+			pm10Datalist: [{name: "PM10", data: []}],
+			latestPM25: [0], 
+			pm25Datalist: [{name: "PM2.5", data: []}],
+			latestSound: [0],
+			soundDatalist: [{name: "Sound", data: []}],
+			latestVibration: [0],
       IoT_payload_object: {}, IoT_device_data: {},
     };
 		
@@ -88,16 +94,16 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 					this.setState({IoT_device_data: message_object.state.reported.data[i]});
 					setTimeout(()=>{
 						this.setState({deviceID: message_object.state.reported.data[0].deviceId})
-						this.setState({currentTemp: [message_object.state.reported.data[i].temp]});
-						this.setState({currentHum: [message_object.state.reported.data[i].humid]});
-						this.setState({currentPM1: [message_object.state.reported.data[i].pm1]});
-						this.setState({currentPM10: [message_object.state.reported.data[i].pm10]});
-						this.setState({currentPM25: [message_object.state.reported.data[i].pm25]});
-						this.setState({currentSound: [message_object.state.reported.data[i].sound]});
-						this.setState({currentVibration: [message_object.state.reported.data[i].vib]});
+						this.setState({latestTemp: [message_object.state.reported.data[i].temp]});
+						this.setState({latestHum: [message_object.state.reported.data[i].humid]});
+						this.setState({latestPM1: [message_object.state.reported.data[i].pm1]});
+						this.setState({latestPM10: [message_object.state.reported.data[i].pm10]});
+						this.setState({latestPM25: [message_object.state.reported.data[i].pm25]});
+						this.setState({latestSound: [message_object.state.reported.data[i].sound]});
+						this.setState({latestVibration: [message_object.state.reported.data[i].vib]});
 						this.setState({tempDatalist: this.setDataList(this.state.tempDatalist, message_object.state.reported.data[i].temp)});
 						this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
-						this.setState({pmDatalist: this.setDataList(this.state.pmDatalist,message_object.state.reported.data[i].pm25)});
+						this.setState({pm1Datalist: this.setDataList(this.state.pm1Datalist,message_object.state.reported.data[i].pm1)});
 						// ! setTimeout is a non-blocking.
 					// }, i*1000);
 					}, i*900);
@@ -114,18 +120,18 @@ class DeviceCard extends React.Component <MyProps, MyState>{
   setDataList(attributeDatalist: any, payloadAtrributeData: any){
 		let newDatalist : any = [];
     attributeDatalist.forEach((e: any)=>{
-			let currentData = e.data;
-			currentData = this.addData(currentData, payloadAtrributeData);
-			if(newDatalist.length > 10){
+			let latestData = e.data;
+			latestData = this.addData(latestData, payloadAtrributeData);
+			if(newDatalist.length > 10){		// For performance
 				newDatalist.shift();
-			}
-			newDatalist.push({name: e.name, data: currentData});
+			};
+			newDatalist.push({name: e.name, data: latestData});
     })
 		return newDatalist;
   }
 	
-	addData(currentData: any, payloadAttributeData: any){
-		return[...currentData,  {x: new Date(), y: payloadAttributeData}];
+	addData(latestData: any, payloadAttributeData: any){
+		return[...latestData,  {x: new Date(), y: payloadAttributeData}];
 	}
 	
 	handlePowerOffClick(){
@@ -151,7 +157,7 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 				<div style={{fontWeight:"bold", color:"#454545", marginTop:"7px", marginBottom:"2px"}}> Temperature</div>
 				<Box className="tempCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-						<ReactApexChart options={tempRadialChartOption} series={this.state.currentTemp} type="radialBar" height={120} width={80}/>
+						<ReactApexChart options={tempRadialChartOption} series={this.state.latestTemp} type="radialBar" height={130} width={110}/>
 					</Box>
 						<div className="LineChart">
 							<RealtimeLineChart
@@ -164,7 +170,7 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 				<div style={{fontWeight:"bold",color:"#454545", marginTop:"7px", marginBottom:"2px"}}> Humidity</div>
 				<Box className="humCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-						<ReactApexChart options={humRadialChartOption} series={this.state.currentHum} type="radialBar" height={120} width={80}/>
+						<ReactApexChart options={humRadialChartOption} series={this.state.latestHum} type="radialBar" height={130} width={110}/>
 					</Box>
 						<div className="LineChart">
 							<RealtimeLineChart
@@ -178,7 +184,7 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 				<div style={{fontWeight:"bold",color:"#454545", marginTop:"7px", marginBottom:"2px"}}> Sound</div>
 				<Box className="humCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-						<ReactApexChart options={humRadialChartOption} series={this.state.currentSound} type="radialBar" height={120} width={80}/>
+						<ReactApexChart options={soundRadialChartOption} series={this.state.latestSound} type="radialBar" height={130} width={110}/>
 					</Box>
 						<div className="LineChart">
 							<RealtimeLineChart
@@ -189,18 +195,18 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
-				<div style={{fontWeight:"bold", color:"#454545", marginTop:"7px", marginBottom:"2px", fontSize: "13px"}}>PM1/PM2.5/PM10</div>
+				<div style={{fontWeight:"bold", color:"#454545", marginTop:"7px", marginBottom:"2px", fontSize: "13px"}}>PM1 / PM2.5 / PM10</div>
 				<Box className="pmCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
 						<ReactApexChart 
 						options={multiPMsCustomAngleRadialChartOption} 
-						series={[this.state.currentPM1,this.state.currentPM25,this.state.currentPM10]} 
+						series={[this.state.latestPM1,this.state.latestPM25,this.state.latestPM10]} 
 						type="radialBar" 
-						height={150} width={100}/>
+						height={150} width={110}/>
 					</Box>
 					<div className="LineChart">
 						<RealtimeLineChart
-							dataList={this.state.pmDatalist}
+							dataList={this.state.pm1Datalist}
 							range={TIME_RANGE_IN_MILLISECONDS}
 							/>
 					</div>
@@ -208,18 +214,18 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 				
 				
 				<Divider style={{width:'100%'}}></Divider>
-				<div style={{fontWeight:"bold", color:"#454545", marginTop:"7px", marginBottom:"2px", fontSize: "13px"}}>Horizontal/Vertical Vibration</div>
+				<div style={{fontWeight:"bold", color:"#454545", marginTop:"7px", marginBottom:"2px", fontSize: "13px"}}>Horizontal / Vertical Vibration</div>
 				<Box className="pmCharts" display="flex" flexDirection="row" alignItems="flex-end" justifyContent="flex-end" marginBottom="5px">
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
 						<ReactApexChart 
 						options={multiVibrationCustomAngleRadialChartOption} 
-						series={[this.state.currentPM1,this.state.currentPM25]} 
+						series={[this.state.latestPM1,this.state.latestPM25]} 
 						type="radialBar" 
-						height={150} width={100}/>
+						height={150} width={110}/>
 					</Box>
 					<div className="LineChart">
 						<RealtimeLineChart
-							dataList={this.state.pmDatalist}
+							dataList={[this.state.tempDatalist[0], this.state.humDatalist[0]]}
 							range={TIME_RANGE_IN_MILLISECONDS}
 							/>
 					</div>
