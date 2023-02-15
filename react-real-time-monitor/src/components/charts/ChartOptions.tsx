@@ -353,7 +353,7 @@ export var multiPMsRadialChartOption : ApexOptions =
 	dataLabels: {
 		enabled: true,
 		style: {
-			colors: ['#ff8b3d', '#FFAA33', '#db3f36']
+			colors: ['#FFAA33','#ff8b3d', '#db3f36']
 		}
 	}
 }
@@ -390,7 +390,7 @@ export var multiPMsRealtimeLinechartOption : ApexOptions =
 			formatter: (val: any) => val.toFixed(0)
 		},
 	},
-	colors: ['#db3f36', '#FFAA33', '#ff8b3d']
+	colors: ['#db3f36', '#ff8b3d', '#FFAA33']
 }
 
 export var multiVibrationsRadialChartOption : ApexOptions =
