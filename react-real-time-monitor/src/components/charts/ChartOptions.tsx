@@ -2,61 +2,101 @@ import { ApexOptions } from "apexcharts";
 import moment from "moment";
 
 // ------------------ DEVICE CARD CHARTS OPTIONS ------------------
+// Time range real-time chart
+const TIME_RANGE_IN_MILLISECONDS = 30 * 1000;
+
 export var tempRadialChartOption : ApexOptions =
-	{
-		plotOptions: {
-			radialBar: {
-				startAngle: 0,
-				endAngle: 360,
-					hollow: {
-					margin: 0,
-					size: '80%',
-					background: '#fff',
-					image: undefined,
-					imageOffsetX: 0,
-					imageOffsetY: 0,
-					position: 'front',
-				},
-				track: {
-					background: '#f2f2f2',
-					strokeWidth: '150%',
-					margin: 0, // margin is in pixels
-				},
-				dataLabels: {
+{
+	plotOptions: {
+		radialBar: {
+			startAngle: 0,
+			endAngle: 360,
+				hollow: {
+				margin: 0,
+				size: '80%',
+				background: '#fff',
+				image: undefined,
+				imageOffsetX: 0,
+				imageOffsetY: 0,
+				position: 'front',
+			},
+			track: {
+				background: '#f2f2f2',
+				strokeWidth: '150%',
+				margin: 0, // margin is in pixels
+			},
+			dataLabels: {
+				show: true,
+				name: {
+					offsetY: -9,
 					show: true,
-					name: {
-						offsetY: -9,
-						show: true,
-						color: '#888',
-						fontSize: '12px'
+					color: '#888',
+					fontSize: '12px'
+				},
+				value: {
+					formatter: function(val) {
+						return val.toFixed(1).toString();
 					},
-					value: {
-						formatter: function(val) {
-							return val.toFixed(1).toString();
-						},
-						offsetY:0,
-						color: '#111',
-						fontSize: '20px',
-						show: true,
-					}
+					offsetY:0,
+					color: '#111',
+					fontSize: '20px',
+					show: true,
+					
 				}
 			}
+		}
+	},
+	fill: {
+		type: 'gradient',
+		gradient: {
+			shade: 'light',
+			type: 'horizontal',
+			shadeIntensity: 0.5,
+			gradientToColors: ['#ff5e62'],
+			inverseColors: false,
+			opacityFrom: 1,
+			opacityTo: 1,
+			stops: [0, 100]
+		}
+	},
+
+	labels: [String.fromCodePoint(8451)],
+}
+
+export var tempRealtimeLinechartOption : ApexOptions =
+{
+	chart: {
+		toolbar: {
+			show: false
 		},
-		fill: {
-			type: 'gradient',
-			gradient: {
-				shade: 'light',
-				type: 'horizontal',
-				shadeIntensity: 0.5,
-				gradientToColors: ['#ff5e62'],
-				inverseColors: false,
-				opacityFrom: 1,
-				opacityTo: 1,
-				stops: [0, 100]
+		zoom: {
+			enabled: false
+		},
+		animations:{
+			easing: "linear",
+			dynamicAnimation: {
+				speed: 500
 			}
 		},
-
-		labels: [String.fromCodePoint(8451)],
+	},
+	tooltip:{
+		x: {
+			format: "yyyy/MM/dd HH:mm:ss.f"
+		}
+	},
+	xaxis: {
+		type: "datetime",
+		range: TIME_RANGE_IN_MILLISECONDS,
+		labels: {
+			datetimeUTC: false											// ! IMPORTANT: default is true
+		}
+	},
+	yaxis: {
+		labels:{
+			formatter: (val: any) => val.toFixed(0)
+		},
+	},
+	colors: ['#ff5e62']
 }
 
 export var humRadialChartOption : ApexOptions =
@@ -117,6 +157,41 @@ export var humRadialChartOption : ApexOptions =
 	labels: ['%'],
 }
 
+export var humRealtimeLinechartOption : ApexOptions =
+{
+	chart: {
+		toolbar: {
+			show: false
+		},
+		zoom: {
+			enabled: false
+		},
+		animations:{
+			easing: "linear",
+			dynamicAnimation: {
+				speed: 500
+			}
+		},
+	},
+	tooltip:{
+		x: {
+			format: "yyyy/MM/dd HH:mm:ss.f"
+		}
+	},
+	xaxis: {
+		type: "datetime",
+		range: TIME_RANGE_IN_MILLISECONDS,
+		labels: {
+			datetimeUTC: false											// ! IMPORTANT: default is true
+		}
+	},
+	yaxis: {
+		labels:{
+			formatter: (val: any) => val.toFixed(0)
+		},
+	},
+}
+
 export var soundRadialChartOption : ApexOptions =
 {
 	plotOptions: {
@@ -164,8 +239,8 @@ export var soundRadialChartOption : ApexOptions =
 			shade: 'light',
 			type: 'horizontal',
 			shadeIntensity: 0.5,
-			gradientToColors: ['#6B6B6B'],
-			inverseColors: false,
+			gradientToColors: ['#FFFF00'],
+			inverseColors: true,
 			opacityFrom: 1,
 			opacityTo: 1,
 			stops: [0, 100]
@@ -175,7 +250,43 @@ export var soundRadialChartOption : ApexOptions =
 	labels: ['dB(SPL)'],
 }
 
-export var multiPMsCustomAngleRadialChartOption : ApexOptions =
+export var soundRealtimeLinechartOption : ApexOptions =
+{
+	chart: {
+		toolbar: {
+			show: false
+		},
+		zoom: {
+			enabled: false
+		},
+		animations:{
+			easing: "linear",
+			dynamicAnimation: {
+				speed: 500
+			}
+		},
+	},
+	tooltip:{
+		x: {
+			format: "yyyy/MM/dd HH:mm:ss.f"
+		}
+	},
+	xaxis: {
+		type: "datetime",
+		range: TIME_RANGE_IN_MILLISECONDS,
+		labels: {
+			datetimeUTC: false											// ! IMPORTANT: default is true
+		}
+	},
+	yaxis: {
+		labels:{
+			formatter: (val: any) => val.toFixed(0)
+		},
+	},
+	colors: ['#FFFF00']
+}
+
+export var multiPMsRadialChartOption : ApexOptions =
 {
 	grid: {
 		padding: {
@@ -186,8 +297,8 @@ export var multiPMsCustomAngleRadialChartOption : ApexOptions =
 	chart: {
 		height: 350,
 		type: 'radialBar',
-		},
-		plotOptions: {
+	},
+	plotOptions: {
 		radialBar: {
 			track:{
 				strokeWidth: '130',
@@ -200,9 +311,14 @@ export var multiPMsCustomAngleRadialChartOption : ApexOptions =
 				offsetY: -9,
 				fontSize: '20px',
 			},
+			
 			value: {
 				offsetY: 0,
-				fontSize: '15px',
+				fontSize: '17px',
+				fontWeight: 'bold',
+				formatter: function (val) {
+					return val.toString();
+				}
 			},
 			
 			
@@ -213,30 +329,71 @@ export var multiPMsCustomAngleRadialChartOption : ApexOptions =
 				formatter: function (w) {
 				// By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
 				return w.config.series[0] + ' / ' + w.config.series[1] + ' / ' + w.config.series[2]
-				}
-			}
+				},
+			},
 			}
 		}
-		},
+	},
 		labels: ['PM1', 'PM2.5', 'PM10'],
 		
 		fill: {
+			colors: ['#ff6600', '#ff8b3d', '#ffaf7a'],
 			type: 'gradient',
 			gradient: {
 				shade: 'light',
 				type: 'horizontal',
 				shadeIntensity: 0.5,
-				gradientToColors: ['#ff5e62'],
+				gradientToColors: ['#ff8b3d', '#FFAA33', '#db3f36'],
 				inverseColors: false,
 				opacityFrom: 1,
 				opacityTo: 1,
 				stops: [0, 100]
 			}
 		},
-	
+	dataLabels: {
+		enabled: true,
+		style: {
+			colors: ['#ff8b3d', '#FFAA33', '#db3f36']
+		}
+	}
+}
+export var multiPMsRealtimeLinechartOption : ApexOptions =
+{
+	chart: {
+		toolbar: {
+			show: false
+		},
+		zoom: {
+			enabled: false
+		},
+		animations:{
+			easing: "linear",
+			dynamicAnimation: {
+				speed: 500
+			}
+		},
+	},
+	tooltip:{
+		x: {
+			format: "yyyy/MM/dd HH:mm:ss.f"
+		}
+	},
+	xaxis: {
+		type: "datetime",
+		range: TIME_RANGE_IN_MILLISECONDS,
+		labels: {
+			datetimeUTC: false											// ! IMPORTANT: default is true
+		}
+	},
+	yaxis: {
+		labels:{
+			formatter: (val: any) => val.toFixed(0)
+		},
+	},
+	colors: ['#db3f36', '#FFAA33', '#ff8b3d']
 }
 
-export var multiVibrationCustomAngleRadialChartOption : ApexOptions =
+export var multiVibrationsRadialChartOption : ApexOptions =
 {
 	grid: {
 		padding: {
@@ -261,7 +418,11 @@ export var multiVibrationCustomAngleRadialChartOption : ApexOptions =
 				},
 				value: {
 					offsetY: 0,
-					fontSize: '15px',
+					fontSize: '17px',
+					fontWeight: 'bold',
+					formatter: function (val) {
+						return val.toString();
+					}
 				},
 				total: {
 					show: true,
@@ -277,7 +438,44 @@ export var multiVibrationCustomAngleRadialChartOption : ApexOptions =
 		},
 
 		labels: ['Horizontal', 'Vertical'],
+		
+		colors: ['#A020F0', '#00FFFF']
 	
+}
+
+export var multiVibrationsRealtimeLinechartOption : ApexOptions =
+{
+	chart: {
+		toolbar: {
+			show: false
+		},
+		zoom: {
+			enabled: false
+		},
+		animations:{
+			easing: "linear",
+			dynamicAnimation: {
+				speed: 500
+			}
+		},
+	},
+	tooltip:{
+		x: {
+			format: "yyyy/MM/dd HH:mm:ss.f"
+		}
+	},
+	xaxis: {
+		type: "datetime",
+		labels: {
+			datetimeUTC: false											// ! IMPORTANT: default is true
+		}
+	},
+	yaxis: {
+		labels:{
+			formatter: (val: any) => val.toFixed(0)
+		},
+	},
+	colors: ['#00FFFF', '#A020F0']
 }
 
 
@@ -325,52 +523,55 @@ export var soundRadialStroke : ApexOptions =
 		dashArray: 4
 	},
 	labels: ['dB (SPL)'],
+	colors: ['#4c00b0',  '#00FFFF']
 }
 
-export var vibrationRadialStroke : ApexOptions =
+export var vibrationRadialStroke =
 {
-	grid: {
-		padding: {
-		 top: -25,
-		 bottom: 0
-		}
-	},
-	plotOptions: {
-		radialBar: {
-			startAngle: -90,
-			endAngle: 90,
-			dataLabels: {
-				name: {
-					fontSize: '12px',
-					color: undefined,
-					offsetY: 12
-				},
-				value: {
-					offsetY: -20,
-					fontSize: '22px',
-					color: undefined,
-					formatter: function(val) {
-						return val.toString();
+	options: {
+		grid: {
+			padding: {
+			 top: -25,
+			 bottom: 0
+			}
+		},
+		plotOptions: {
+			radialBar: {
+				startAngle: -90,
+				endAngle: 90,
+				dataLabels: {
+					name: {
+						fontSize: '12px',
+						color: undefined,
+						offsetY: 12
+					},
+					value: {
+						offsetY: -20,
+						fontSize: '22px',
+						color: undefined,
+						formatter: function(val: any) {
+							return val.toString();
+						}
 					}
 				}
 			}
-		}
-	},
-	fill: {
-		type: 'gradient',
-		gradient: {
-				shade: 'dark',
-				shadeIntensity: 0.15,
-				inverseColors: false,
-				opacityFrom: 1,
-				opacityTo: 1,
-				stops: [0, 50, 65, 91]
 		},
-	},
-	stroke: {
-		dashArray: 4
-	},
-	labels: ['g'],
+		fill: {
+			type: 'gradient',
+			gradient: {
+					shade: 'dark',
+					shadeIntensity: 0.15,
+					inverseColors: false,
+					opacityFrom: 1,
+					opacityTo: 1,
+					stops: [0, 50, 65, 91]
+			},
+		},
+		stroke: {
+			dashArray: 4
+		},
+		labels: ['g'],
+	}
 }
 
 
