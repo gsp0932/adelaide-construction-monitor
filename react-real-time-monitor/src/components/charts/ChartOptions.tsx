@@ -246,6 +246,8 @@ export var soundRadialChartOption : ApexOptions =
 			stops: [0, 100]
 		}
 	},
+	
+	colors: ['#8B8000'],
 
 	labels: ['dB(SPL)'],
 }
@@ -330,32 +332,15 @@ export var multiPMsRadialChartOption : ApexOptions =
 				// By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
 				return w.config.series[0] + ' / ' + w.config.series[1] + ' / ' + w.config.series[2]
 				},
+				color: '#808080'
 			},
 			}
 		}
 	},
 		labels: ['PM1', 'PM2.5', 'PM10'],
 		
-		fill: {
-			colors: ['#ff6600', '#ff8b3d', '#ffaf7a'],
-			type: 'gradient',
-			gradient: {
-				shade: 'light',
-				type: 'horizontal',
-				shadeIntensity: 0.5,
-				gradientToColors: ['#ff8b3d', '#FFAA33', '#db3f36'],
-				inverseColors: false,
-				opacityFrom: 1,
-				opacityTo: 1,
-				stops: [0, 100]
-			}
-		},
-	dataLabels: {
-		enabled: true,
-		style: {
-			colors: ['#FFAA33','#ff8b3d', '#db3f36']
-		}
-	}
+		colors:['#ff8b3d', '#FFAA33', '#db3f36']
+		
 }
 export var multiPMsRealtimeLinechartOption : ApexOptions =
 {
@@ -431,7 +416,8 @@ export var multiVibrationsRadialChartOption : ApexOptions =
 					formatter: function (w) {
 					// By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
 					return w.config.series[0] + ' / ' + w.config.series[1]
-					}
+					},
+					color: '#808080'
 				}
 				}
 			},
@@ -479,100 +465,7 @@ export var multiVibrationsRealtimeLinechartOption : ApexOptions =
 }
 
 
-export var soundRadialStroke : ApexOptions =
-{
-	grid: {
-		padding: {
-		 top: -25,
-		 bottom: 0
-		}
-	},
-	plotOptions: {
-		radialBar: {
-			startAngle: -90,
-			endAngle: 90,
-			dataLabels: {
-				name: {
-					fontSize: '12px',
-					color: undefined,
-					offsetY: 12
-				},
-				value: {
-					offsetY: -20,
-					fontSize: '22px',
-					color: undefined,
-					formatter: function(val) {
-						return val.toString();
-					}
-				}
-			}
-		}
-	},
-	fill: {
-		type: 'gradient',
-		gradient: {
-				shade: 'dark',
-				shadeIntensity: 0.15,
-				inverseColors: false,
-				opacityFrom: 1,
-				opacityTo: 1,
-				stops: [0, 50, 65, 91]
-		},
-	},
-	stroke: {
-		dashArray: 4
-	},
-	labels: ['dB (SPL)'],
-	colors: ['#4c00b0',  '#00FFFF']
-}
 
-export var vibrationRadialStroke =
-{
-	options: {
-		grid: {
-			padding: {
-			 top: -25,
-			 bottom: 0
-			}
-		},
-		plotOptions: {
-			radialBar: {
-				startAngle: -90,
-				endAngle: 90,
-				dataLabels: {
-					name: {
-						fontSize: '12px',
-						color: undefined,
-						offsetY: 12
-					},
-					value: {
-						offsetY: -20,
-						fontSize: '22px',
-						color: undefined,
-						formatter: function(val: any) {
-							return val.toString();
-						}
-					}
-				}
-			}
-		},
-		fill: {
-			type: 'gradient',
-			gradient: {
-					shade: 'dark',
-					shadeIntensity: 0.15,
-					inverseColors: false,
-					opacityFrom: 1,
-					opacityTo: 1,
-					stops: [0, 50, 65, 91]
-			},
-		},
-		stroke: {
-			dashArray: 4
-		},
-		labels: ['g'],
-	}
-}
 
 
 // ------------------ DEVICE HISTORY CHARTS OPTIONS ------------------
