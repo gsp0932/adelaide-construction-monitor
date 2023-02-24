@@ -119,12 +119,12 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 					// }, i*1000);
 					}, i*900);
 				}
+				// console.log(this.state.IoT_device_data);
 			}
 			},
       error: error => console.error(error),
       // close:() => console.log('Done'),			// 'close' is not declared in definition
   });
-	
 			
   }
   

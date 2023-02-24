@@ -1,12 +1,12 @@
-import './App.css';
+import '../Devices.css';
 import * as React  from 'react';
 
-import {AwsIoT_connect} from './utils/Connection';
+import {AwsIoT_connect} from '../utils/Connection';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
-import DeviceCard from './components/DeviceCard';
+import DeviceCard from '../components/DeviceCard';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -25,7 +25,7 @@ export interface MyState {
 };
 
 // Main App - Homepage
-class App extends React.Component <MyProps, MyState>{
+class Devices extends React.Component <MyProps, MyState>{
   constructor(props: any){
     super(props);
     this.state = {
@@ -131,4 +131,4 @@ class App extends React.Component <MyProps, MyState>{
 
 
 
-export default App;
+export default Devices;
