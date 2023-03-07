@@ -12,19 +12,20 @@ opts.secretOrKey = 'secret';
 
 module.exports = passport => {
 	passport.use(new JWTStrategy(opts, (jwt_payload, done)=>{
-		console.log(jwt_payload);
-		user_data.query("username").eq(jwt_payload.username)
+		if(jwt_payload.username !== undefined){
+			user_data.query("username").eq(jwt_payload.username)
 			.exec((errors, results)=>{
-				if(results.count === 1)
-				{
+				if(results.count === 1){
 					return done(null, user_data);
-				} 
-				else
-				{
-					return done(null, false);
-				}
+				} else {
+						return done(null, false);
+					}
 				}
 			)
+		} else {
+			console.log("jwt_payload: \n", jwt_payload);
+			console.log("Failed decoding jwt_payload. jwt_payload undefined.")
+		}
 	}
 	));
 }

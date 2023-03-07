@@ -21,7 +21,7 @@ require('./src/passport')(passport);
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-// Routes for register users, users'login and get users'profiles.
+// Routes for register users, users' login and get users' profiles.
 app.use('/api/user', user);
 
 app.get('/', function(req, res){
