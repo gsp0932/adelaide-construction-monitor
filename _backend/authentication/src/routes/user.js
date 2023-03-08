@@ -65,12 +65,10 @@ router.post('/register', function(req, res){
 									.save()
 									.then(user_data => {
 										res.json
-										(
-											{
-												user_data, 
-												"message": 'New user registered successfully'
-											}
-										);
+										({
+											user_data, 
+											"message": 'New user registered successfully'
+										});
 									})
 							}
 							});
@@ -112,8 +110,9 @@ router.post('/login', (req, res) => {
 				);
 			}
 			else if (results.count === 1){
-				console.log(results[0]);	// ! querried user_data at index 0 of querry result
-				bcrypt.compare(password, results[0].password) // Verify password
+				// console.log(results[0]);	// ! DEBUG: querried user_data at index 0 of querry result
+				let user_data = results[0];
+				bcrypt.compare(password, user_data.password) // Verify password
 					.then(isMatch => {
 						if(isMatch){
 							const payload = {
@@ -123,17 +122,17 @@ router.post('/login', (req, res) => {
 							};
 							jwt.sign(
 								payload,
-								'secret', 
+								'secret',
 								{expiresIn: 3600}, 
 								(err, token) => {
 									if(err){
 										console.error('There is some error in token', err);
 									} else {
-										res.json({
-											success: true,
-											token: `Bearer ${token}`
-										});
-									}
+											res.json({
+												success: true,
+												token: `Bearer ${token}`
+											});
+										}
 								}
 							);
 						}
