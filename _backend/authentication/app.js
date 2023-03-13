@@ -21,12 +21,14 @@ require('./src/passport')(passport);
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-// Routes for register users, users' login and get users' profiles.
-app.use('/api/user', user);
-
+// 
 app.get('/', function(req, res){
 	res.send('Hello');
 });
+
+// Routes for register users, users' login and get users' profiles.
+app.use('/api/user', user);
+
 
 // Specify PORT for local testing
 const PORT = process.env.PORT || 5000;

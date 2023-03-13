@@ -1,13 +1,14 @@
 const express = require('express');
-const router = express.Router();
-const gravatar = require('gravatar');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
-const validateRegisterInput = require('../validation/register');
-const validateLoginInput = require('../validation/login');
+const router = express.Router();	// for using router
+const gravatar = require('gravatar');	// for gravatar
+const bcrypt = require('bcryptjs');	// for encrypt and signing
+const jwt = require('jsonwebtoken');	// for generating and signing with jwt token
+const passport = require('passport');	// for authentication
+const validateRegisterInput = require('../validation/register');	// for registration validating methods
+const validateLoginInput = require('../validation/login');	// for login validating methods 
 
-const user_data = require('../models/user_data');
+const user_credentials = require('../models/user_credentials');	
+const { v4: uuidv4} = require('uuid'); // for generating uuid in user_credentials dynamodb
 const res = require('express/lib/response');
 
 const dynamoose = require('dynamoose');
@@ -22,69 +23,88 @@ router.post('/register', function(req, res){
 		return res.status(400).json(errors);
 	}
 	
-	user_data.query("username")
-		.eq(req.body.username)
-		.exec((error, results) => {
-			if(error){
-				console.log(error);
-			}
-			else if(results.count === 1) { // if there exists a username with the same value in the databsse
+	// TODO: Recheck logic
+	user_credentials.query("email")	// Check if email already used first
+		.eq(req.body.email)
+		.using("email-index")
+		.exec((errors, results) => {
+			if(errors){
+				console.log(errors);
+			} else if (results.count === 1) {
+				console.log('This email is already used.');
 				return res.status(400).json({
-					username: 'Username already exists'
+					username: 'This email is already used.'
 				});
-			}
-			else {
-				// Store avatar from email
-				const avatar = gravatar.url(req.body.email, {
-					s: '200',
-					r: 'pg',
-					d: 'mm'
-				});
-				
-				// Insert new item
-				const newUserData = new user_data({
-					username: req.body.username,
-					email: req.body.email,
-					password: req.body.password,
-					phone: req.body.phone,
-					avatar
-				});
-				
-				// Hash password
-				bcrypt.genSalt(10, (err,salt)=>{
-					if(err){
-						console.error('There was an error', err);
-					} 
-					else {
-						bcrypt.hash(newUserData.password, salt, (err, hash)=> {
-							if(err){
-								console.error('There was an error', err);
-							} else {
-								newUserData.password = hash;
-								newUserData
-									.save()
-									.then(user_data => {
-										res.json
-										({
-											user_data, 
-											"message": 'New user registered successfully'
-										});
-									})
-							}
+			} else {
+				user_credentials.query("username")
+					.eq(req.body.username)
+					.using("username-index")
+					.exec((error, results) => {
+						if(error){
+							console.log(error);
+						}
+						else if(results.count === 1) { // Check if username is already used
+							console.log('This username is already used.');
+							return res.status(400).json({
+								username: 'This username already used.'
 							});
 						}
-					});
-					
-					// Insertation response
-					newUserData.save((err) => {
-						if (err) {
-							console.log('Error registering new user:', err);
-						} else {
-							console.log('New user registered successfully');
-						}
-					});
-				}
-				});
+						else {
+							// Store avatar from email
+							const avatar = gravatar.url(req.body.email, {
+								s: '200',
+								r: 'pg',
+								d: 'mm'
+							});
+							
+							// Insert new item
+							const newUserData = new user_credentials({
+								uuid: uuidv4(),
+								email: req.body.email,
+								username: req.body.username,
+								password: req.body.password,
+								phone: req.body.phone,
+								avatar
+							});
+							
+							// Hash password
+							bcrypt.genSalt(10, (err,salt)=>{
+								if(err){
+									console.error('There was an error', err);
+								} 
+								else {
+									bcrypt.hash(newUserData.password, salt, (err, hash)=> {
+										if(err){
+											console.error('There was an error', err);
+										} else {
+											newUserData.password = hash;
+											newUserData
+												.save()
+												.then(user_credentials => {
+													res.json
+													({
+														user_credentials,
+														"message": 'New user registered successfully'
+													});
+												})
+										}
+										});
+									}
+								});
+								
+								// Insertation response
+								newUserData.save((err) => {
+									if (err) {
+										console.log('Error registering new user:', err);
+									} else {
+										console.log('New user registered successfully');
+									}
+								});
+							}
+							});
+			}
+		})
+	
 });
 
 // User login
@@ -97,32 +117,30 @@ router.post('/login', (req, res) => {
 
 	const password = req.body.password;	// Store password from the request
 
-	user_data.query("username")
-		.eq(req.body.username)
+	user_credentials.query("email")
+		.eq(req.body.email)
+		.using("email-index")
 		.exec((errors, results) => {
 			if(errors) {
 				console.log(errors);
 				return res.status(404).json(
 					{
 						errors: errors,
-						"message": 'user_data not found'
+						"message": 'user_credentials not found'
 					}
 				);
 			}
 			else if (results.count === 1){
-				// console.log(results[0]);	// ! DEBUG: querried user_data at index 0 of querry result
-				let user_data = results[0];
-				bcrypt.compare(password, user_data.password) // Verify password
+				let user_credentials = results[0];	// user_credentials result is at index 0 of results array
+				bcrypt.compare(password, user_credentials.password) // Verify password
 					.then(isMatch => {
 						if(isMatch){
 							const payload = {
-								// id: user_data.id,	// dynamodb does not support uuid
-								username: user_data.username,
-								avatar: user_data.avatar
+								uuid: user_credentials.uuid,
 							};
 							jwt.sign(
 								payload,
-								'secret',
+								"secret",
 								{expiresIn: 3600}, 
 								(err, token) => {
 									if(err){
@@ -130,7 +148,7 @@ router.post('/login', (req, res) => {
 									} else {
 											res.json({
 												success: true,
-												token: `Bearer ${token}`
+												token: `Bearer ${token}`	// This format is required in the header of the get request sent to /profile as well
 											});
 										}
 								}
@@ -146,15 +164,17 @@ router.post('/login', (req, res) => {
 });
 
 // Get user's profile
-router.get('/profile', 
-passport.authenticate('jwt', {session: false}), 
-(req, res)=>{
-	return res.json({"hello":"world"})
-	// return res.json({
-	// 	// id: req.user_data.id,
-	// 	username: user_data.username,
-	// 	email: user_data.email
-	// })
+router.get(
+	'/profile',
+	passport.authenticate(
+		'jwt', 
+		{session: false}), 
+		(req, res)=>{
+			return res.json({
+				"username": user.username,
+				"email": user.email,
+				"avatar": user.avatar
+			})
 })
 
 module.exports = router;

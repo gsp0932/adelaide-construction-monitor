@@ -1,5 +1,5 @@
 aws dynamodb put-item \
-    --table-name user_data  \
+    --table-name user_credentials  \
     --item \
         '{
 					"username": {"S": "testusername"}, 
