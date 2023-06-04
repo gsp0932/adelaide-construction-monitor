@@ -1,16 +1,11 @@
 import * as React from 'react';
 import { PubSub } from 'aws-amplify';
-import {tempRadialChartOption, humRadialChartOption, soundRadialChartOption, multiPMsRadialChartOption, multiVibrationsRadialChartOption, tempRealtimeLinechartOption, multiVibrationsRealtimeLinechartOption, humRealtimeLinechartOption, soundRealtimeLinechartOption, multiPMsRealtimeLinechartOption} from './charts/options';
+import {tempRadialChartOption, humRadialChartOption, soundRadialChartOption, multiPMsRadialChartOption, multiVibrationsRadialChartOption, tempRealtimeLinechartOption, multiVibrationsRealtimeLinechartOption, humRealtimeLinechartOption, soundRealtimeLinechartOption, multiPMsRealtimeLinechartOption} from './charts/ChartOptions';
 import ReactApexChart from "react-apexcharts";
-
+import ReportIcon from '@mui/icons-material/Report';
 import Box from '@mui/material/Box';
-
-import { 
-	// Button, 
-	// Collapse, 
-	// ToggleButton ,
-	Divider, IconButton, 
-} from '@mui/material';
+import {Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Typography} from '@mui/material';
+import { Button,Collapse, ToggleButton ,Divider, IconButton, } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 // import {styled} from '@mui/material/styles';
@@ -42,6 +37,9 @@ export interface MyState {
 	latestHorizontalVibration: number,
 	horizontalVibrationDatalist: any[],
 	IoT_payload_object: {}, IoT_device_data: {},
+	warning: string,
+	deviceWarningOpen: boolean
+	
 };
 	
 class DeviceCard extends React.Component <MyProps, MyState>{
@@ -66,10 +64,13 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 			latestVerticalVibration: 0,
 			verticalVibrationDatalist: [{name: "Vertical", data: []}],
       IoT_payload_object: {}, IoT_device_data: {},
+			warning: "",
+			deviceWarningOpen: false
     };
 		
 		this.handlePowerOffClick = this.handlePowerOffClick.bind(this);
-		
+		this.handleDeviceWarningClick = this.handleDeviceWarningClick.bind(this);
+		this.handleDeviceWarningClose = this.handleDeviceWarningClose.bind(this);
 	}
 	
 	componentDidMount(){
@@ -82,7 +83,8 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 			// Convert packet to string
 			let message = '';
       message = JSON.stringify(data);
-      // Grep message content and convert to object
+			
+      // Get message content and convert to object
       let message_object = JSON.parse(message.substring(message.indexOf('value')+7).slice(0,-1));
 			
 			// Loop through data array
@@ -91,6 +93,7 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 			this.setState({IoT_payload_object:message_object});
 			if(message_object.state.reported.data[0].deviceId ===  this.state.deviceID)						// !
 			{
+				console.log(message_object.state.reported.data[0]);
 				for (let i = 0; i < message_object.state.reported.data.length; i++){
 					this.setState({IoT_device_data: message_object.state.reported.data[i]});
 					setTimeout(()=>{
@@ -101,13 +104,8 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 						this.setState({latestPM10: message_object.state.reported.data[i].pm10});
 						this.setState({latestPM25: message_object.state.reported.data[i].pm25});
 						this.setState({latestSound: message_object.state.reported.data[i].sound});
-						
-						if (message_object.state.reported.data[i].vib_h === null) // ! Remove
-						{
-							this.setState({latestHorizontalVibration: message_object.state.reported.data[i].vib_h});
-							this.setState({latestVerticalVibration: message_object.state.reported.data[i].vib_v});
-						}
-						
+						this.setState({latestHorizontalVibration: message_object.state.reported.data[i].vib_h});
+						this.setState({latestVerticalVibration: message_object.state.reported.data[i].vib_v});
 						this.setState({tempDatalist: this.setDataList(this.state.tempDatalist, message_object.state.reported.data[i].temp)});
 						this.setState({humDatalist: this.setDataList(this.state.humDatalist,message_object.state.reported.data[i].humid)});
 						this.setState({soundDatalist: this.setDataList(this.state.soundDatalist,message_object.state.reported.data[i].sound)});
@@ -126,15 +124,31 @@ class DeviceCard extends React.Component <MyProps, MyState>{
       error: error => console.error(error),
       // close:() => console.log('Done'),			// 'close' is not declared in definition
   });
+	
+		let device_warning = "aws/things/construction_esp32/shadow/alarm/warning"
+		PubSub.subscribe(device_warning).subscribe({
+			next: data =>{
+				let message = '';
+				message = JSON.stringify(data);	// get content of the MQTT body
+				message = JSON.parse(message.substring(message.indexOf('value')+7).slice(0,-1)).message; // get the message from the body content
+				let deviceID = message.slice(message.indexOf('Device')+7,message.indexOf(','));	// get Device ID from the message
+				console.log(message);
+				if(deviceID === this.state.deviceID){
+					message = message.slice(message.indexOf('Device')); // cut the abundant part
+					this.setState({warning: message});
+				}
+			},
+			error: error => console.error(error),
+		})
 			
   }
-  
+	
   setDataList(attributeDatalist: any, payloadAtrributeData: any){
 		let newDatalist : any = [];
     attributeDatalist.forEach((e: any)=>{
 			let latestData = e.data;
 			latestData = this.addData(latestData, payloadAtrributeData);
-			if(newDatalist.length > 10){		// For performance
+			if(newDatalist.length > 10){		// for performance, reducing the data stored
 				newDatalist.shift();
 			};
 			newDatalist.push({name: e.name, data: latestData});
@@ -150,6 +164,14 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 		PubSub.publish('aws/things/construction_esp32/command/' + this.state.deviceID, {msg: 'OFF'});
 	}
 	
+	handleDeviceWarningClick(){
+		this.setState({deviceWarningOpen: true})
+	}
+	
+	handleDeviceWarningClose(){
+		this.setState({deviceWarningOpen: false, warning: ''})
+	}
+	
 	render () {
 		return (
 			<Grid item xs={6} md={8}>
@@ -157,12 +179,44 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 				<Box style={{backgroundColor: '#172153',
 				width: '340px', height: '45px',
 				display: 'flex', flexDirection: 'row', 
-				alignItems: 'center', justifyContent: 'center', gap: '95px', padding: '5px'}}>
+				alignItems: 'center', justifyContent: 'center', gap: '120px', padding: '2px'}}>
 					<div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
 						<div style={{color:"white", fontWeight:"bold"}}>  {this.state.deviceID} </div>
 						<div style={{color:"white", fontSize: "14px"}}> Building 21 </div>
 					</div>
-					<div style={{color:"lime", fontWeight:"bold"}}> Normal </div>
+					{(this.state.warning === "") &&
+						<Box display="flex" flexDirection="row" alignItems='center'>
+						<div style={{color:"lime", fontWeight:"bold", marginRight: "10px", }}> Normal </div>
+							<IconButton onClick={this.handleDeviceWarningClick}>
+								<ReportIcon sx={{color: 'yellow', fontSize: '30px', opacity: '0'}} />
+							</IconButton>
+						</Box>
+					}
+					{(this.state.warning !== "") &&
+						<Box display="flex" flexDirection="row" alignItems='center'>
+							<div style={{color:"red", fontWeight:"bold", marginRight: "10px", }}> Bad </div>
+								<div>
+									<IconButton onClick={this.handleDeviceWarningClick}>
+										<ReportIcon sx={{color: 'yellow', fontSize: '30px'}} />
+									</IconButton>
+									<Dialog open={this.state.deviceWarningOpen} onClose={this.handleDeviceWarningClose}>
+										<DialogTitle>
+											Warning
+										</DialogTitle>
+										<DialogContent>
+											<Typography
+												variant="body1"
+												style={{whiteSpace:'pre-wrap'}}>
+												{this.state.warning}
+											</Typography>
+										</DialogContent>
+										<DialogActions>
+											<Button onClick={this.handleDeviceWarningClose}> Close </Button>
+										</DialogActions>
+									</Dialog>
+								</div>
+						</Box>
+					}
 				</Box>
 				
 				<Divider style={{width:'100%'}}></Divider>
@@ -219,7 +273,7 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 					<Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
 						<ReactApexChart 
 						options={multiPMsRadialChartOption} 
-						series={[this.state.latestPM10,this.state.latestPM25, this.state.latestPM1]} 
+						series={[this.state.latestPM1,this.state.latestPM25, this.state.latestPM10]} 
 						type="radialBar" 
 						height={150} width={110}/>
 					</Box>

@@ -35,7 +35,7 @@ export var tempRadialChartOption : ApexOptions =
 				},
 				value: {
 					formatter: function(val) {
-						return val.toFixed(1).toString();
+						return val.toFixed(2);
 					},
 					offsetY:0,
 					color: '#111',
@@ -47,17 +47,8 @@ export var tempRadialChartOption : ApexOptions =
 		}
 	},
 	fill: {
-		type: 'gradient',
-		gradient: {
-			shade: 'light',
-			type: 'horizontal',
-			shadeIntensity: 0.5,
-			gradientToColors: ['#ff5e62'],
-			inverseColors: false,
-			opacityFrom: 1,
-			opacityTo: 1,
-			stops: [0, 100]
-		}
+		type: 'linear',
+		colors: ['#ff5e62']
 	},
 
 	labels: [String.fromCodePoint(8451)],
@@ -93,7 +84,7 @@ export var tempRealtimeLinechartOption : ApexOptions =
 	},
 	yaxis: {
 		labels:{
-			formatter: (val: any) => val.toFixed(0)
+			formatter: (val: any) => val.toFixed(2)
 		},
 	},
 	colors: ['#ff5e62']
@@ -130,7 +121,7 @@ export var humRadialChartOption : ApexOptions =
 				},
 				value: {
 					formatter: function(val) {
-						return val.toFixed(1).toString();
+						return val.toFixed(2);
 					},
 					offsetY:0,
 					color: '#111',
@@ -141,17 +132,7 @@ export var humRadialChartOption : ApexOptions =
 		}
 	},
 	fill: {
-		type: 'gradient',
-		gradient: {
-			shade: 'light',
-			type: 'horizontal',
-			shadeIntensity: 0.5,
-			gradientToColors: ['#ABE5A1'],
-			inverseColors: false,
-			opacityFrom: 1,
-			opacityTo: 1,
-			stops: [0, 100]
-		}
+		type: 'linear',
 	},
 
 	labels: ['%'],
@@ -187,9 +168,9 @@ export var humRealtimeLinechartOption : ApexOptions =
 	},
 	yaxis: {
 		labels:{
-			formatter: (val: any) => val.toFixed(0)
+			formatter: (val: any) => val.toFixed(2)
 		},
-	},
+	}
 }
 
 export var soundRadialChartOption : ApexOptions =
@@ -223,7 +204,7 @@ export var soundRadialChartOption : ApexOptions =
 				},
 				value: {
 					formatter: function(val) {
-						return val.toFixed(1).toString();
+						return val.toFixed(2);
 					},
 					offsetY:0,
 					color: '#111',
@@ -234,20 +215,10 @@ export var soundRadialChartOption : ApexOptions =
 		}
 	},
 	fill: {
-		type: 'gradient',
-		gradient: {
-			shade: 'light',
-			type: 'horizontal',
-			shadeIntensity: 0.5,
-			gradientToColors: ['#FFFF00'],
-			inverseColors: true,
-			opacityFrom: 1,
-			opacityTo: 1,
-			stops: [0, 100]
-		}
+		type: 'linear',
 	},
 	
-	colors: ['#8B8000'],
+	colors: ['#FFFF00'],
 
 	labels: ['dB(SPL)'],
 }
@@ -282,7 +253,7 @@ export var soundRealtimeLinechartOption : ApexOptions =
 	},
 	yaxis: {
 		labels:{
-			formatter: (val: any) => val.toFixed(0)
+			formatter: (val: any) => val.toFixed(2)
 		},
 	},
 	colors: ['#FFFF00']
@@ -319,7 +290,7 @@ export var multiPMsRadialChartOption : ApexOptions =
 				fontSize: '17px',
 				fontWeight: 'bold',
 				formatter: function (val) {
-					return val.toString();
+					return val.toFixed(1);
 				}
 			},
 			
@@ -339,7 +310,7 @@ export var multiPMsRadialChartOption : ApexOptions =
 	},
 		labels: ['PM1', 'PM2.5', 'PM10'],
 		
-		colors:['#ff8b3d', '#FFAA33', '#db3f36']
+		// colors:[ '#db3f36', '#ff8b3d', '#FFAA33']
 		
 }
 export var multiPMsRealtimeLinechartOption : ApexOptions =
@@ -372,10 +343,10 @@ export var multiPMsRealtimeLinechartOption : ApexOptions =
 	},
 	yaxis: {
 		labels:{
-			formatter: (val: any) => val.toFixed(0)
+			formatter: (val: any) => val.toFixed(2)
 		},
 	},
-	colors: ['#db3f36', '#ff8b3d', '#FFAA33']
+	// colors: ['#db3f36', '#ff8b3d', '#FFAA33']
 }
 
 export var multiVibrationsRadialChartOption : ApexOptions =
@@ -406,7 +377,7 @@ export var multiVibrationsRadialChartOption : ApexOptions =
 					fontSize: '17px',
 					fontWeight: 'bold',
 					formatter: function (val) {
-						return val.toString();
+						return val.toFixed(1);
 					}
 				},
 				total: {
@@ -452,20 +423,18 @@ export var multiVibrationsRealtimeLinechartOption : ApexOptions =
 	},
 	xaxis: {
 		type: "datetime",
+		range: TIME_RANGE_IN_MILLISECONDS,
 		labels: {
 			datetimeUTC: false											// ! IMPORTANT: default is true
 		}
 	},
 	yaxis: {
 		labels:{
-			formatter: (val: any) => val.toFixed(0)
+			formatter: (val: any) => val.toFixed(2)
 		},
 	},
 	colors: ['#00FFFF', '#A020F0']
 }
-
-
-
 
 
 // ------------------ DEVICE HISTORY CHARTS OPTIONS ------------------

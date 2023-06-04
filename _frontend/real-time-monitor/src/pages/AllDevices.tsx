@@ -9,8 +9,11 @@ import Box from '@mui/material/Box';
 import DeviceCard from '../components/DeviceCard';
 
 import Button from '@mui/material/Button';
+import AddCircleRoundedIcon from '@mui/icons-material';
 import Dialog from '@mui/material/Dialog';
-import { DialogContent, DialogContentText, DialogTitle, TextField, DialogActions } from '@mui/material';
+import { DialogContent, DialogContentText, DialogTitle, TextField, DialogActions, Badge, makeStyles } from '@mui/material';
+// import {makeStyles} from '@mui/styles';
+import Notifications from '@mui/icons-material/Notifications';
 
 // Authenticate and connect with AWS MQTT broker
 AwsIoT_connect();
@@ -23,6 +26,12 @@ export interface MyState {
   add_device_textfield_value: string,
   device_id_list: Array<string>
 };
+
+// const useStyles = makeStyles(theme => ({
+//   whiteNotificationIcon:{
+//     color: '#ffffff'
+//   }
+// }))
 
 // Main App - Homepage
 class Devices extends React.Component <MyProps, MyState>{
@@ -53,7 +62,7 @@ class Devices extends React.Component <MyProps, MyState>{
     newList.push(this.state.add_device_textfield_value);
     this.setState({
       device_id_list: newList,
-      add_device_open: false
+      add_device_open: true
     })
   }
   
@@ -66,17 +75,28 @@ class Devices extends React.Component <MyProps, MyState>{
       
       <div className="App">
         
-        <Grid container>
-          
-          <Box flexDirection="column" justifyContent="center" alignItems="center">
-              <Box 
-              display="flex"
-              flexDirection={"row"}
-              justify-content="space-between"
-              alignItems="stretch"
-              gap="150px"
-              marginTop={5} marginBottom={3} marginLeft={2}>
-                <div style={{fontSize: '1.3rem', fontWeight:'bold', color: 'white', marginLeft: '20px'} }>Device</div>
+        <Box display="flex" flexDirection="column" justifyContent="space-around" alignItems="center">
+          <Box 
+            display="flex"
+            flexDirection={"row"}
+            justifyContent="space-between"
+            alignItems="center"
+            padding={2}
+            width={'100%'}
+            >
+              <div style={{fontSize: '1.3rem', fontWeight:'bold', color: 'white', marginLeft: '20px'}  }>Device</div>
+              
+              <Box
+                display="flex"
+                flexDirection={"row"}
+                justifyContent="space-around"
+                marginRight={8}
+              >
+                <div style={{marginRight: '16px'}}>
+                  <Badge badgeContent={4} color="secondary">
+                    <Notifications sx={{color: 'white'}} />  
+                  </Badge>
+                </div>
                 
                 <div>
                   <Button onClick={this.handleClickAddDevice}
@@ -107,22 +127,22 @@ class Devices extends React.Component <MyProps, MyState>{
                     </DialogActions>
                   </Dialog>
                 </div>
-                  
               </Box>
+            </Box>
+          
+          <Box display="flex" flexDirection="column" justifyContent="space-around" alignItems="center">
+            <Grid container spacing={2} display={'flex'} flexWrap={'wrap'} justifyContent={'flex-start'} padding={2}>
+              {this.state.device_id_list.map((deviceID)=>
+                  <Grid item key={deviceID}>
+                    <Grid container direction="column">
+                          <DeviceCard deviceID={deviceID}/>
+                    </Grid>
+                  </Grid> 
+              )}
+            </Grid>
           </Box>
           
-          <Grid container spacing={2} marginLeft={0.5} marginBottom={2}>
-                {this.state.device_id_list.map((deviceID)=>
-                    <Grid item key={deviceID} 
-                    >
-                      <Grid container direction="column">
-                            <DeviceCard deviceID={deviceID}/>
-                      </Grid>
-                    </Grid> 
-                    )}
-          </Grid>
-          
-        </Grid>
+        </Box>
               
       </div>
     ); 

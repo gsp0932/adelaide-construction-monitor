@@ -5,8 +5,9 @@ import reportWebVitals from './reportWebVitals';
 import {HashRouter} from 'react-router-dom';
 import {Routes, Route} from  'react-router-dom';
 
-import Landing from './pages/SignIn';
-import Devices from './pages/Devices';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import Devices from './pages/AllDevices';
 import DeviceHistory from './pages/DeviceHistory';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLFormElement);
@@ -14,8 +15,10 @@ root.render(
   // <React.StrictMode>
     <HashRouter>
       <Routes>
-        <Route path="/" element={<Landing/>}/>
-        <Route path="/Devices" element={<Devices/>}/>
+        {/* <Route path="/" element={<SignIn/>}/> */}
+        <Route path="/" element={<Devices/>}/>
+        <Route path="/SignUp" element={<SignUp/>}/>
+        {/* <Route path="/Devices" element={<Devices/>}/> */}
         <Route path="/DeviceHistory/:deviceID" element={<DeviceHistory/>}/>
       </Routes>
     </HashRouter>

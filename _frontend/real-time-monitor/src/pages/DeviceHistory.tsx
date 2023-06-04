@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 
-import {vibAndSoundBrushOption, tempHumPMBrushOption} from '../components/charts/options';
+import {vibAndSoundBrushOption, tempHumPMBrushOption} from '../components/charts/ChartOptions';
 
 import {useParams} from "react-router";     // for passing argument deviceID
 

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Devices from './pages/Devices';
+import Devices from './pages/AllDevices';
 
 test('renders learn react link', () => {
   render(<Devices />);
