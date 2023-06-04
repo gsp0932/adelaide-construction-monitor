@@ -179,8 +179,8 @@ class DeviceCard extends React.Component <MyProps, MyState>{
 				<Box style={{backgroundColor: '#172153',
 				width: '340px', height: '45px',
 				display: 'flex', flexDirection: 'row', 
-				alignItems: 'center', justifyContent: 'center', gap: '120px', padding: '2px'}}>
-					<div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
+				alignItems: 'center', justifyContent: 'space-between', padding: '2px'}}>
+					<div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '20px'}}>
 						<div style={{color:"white", fontWeight:"bold"}}>  {this.state.deviceID} </div>
 						<div style={{color:"white", fontSize: "14px"}}> Building 21 </div>
 					</div>
